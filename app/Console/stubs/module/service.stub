@@ -1,0 +1,8 @@
+<?php
+
+namespace Modules\DummyModule\Services;
+
+class DummyClassService
+{
+    public function __construct() {}
+}

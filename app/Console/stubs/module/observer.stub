@@ -1,0 +1,48 @@
+<?php
+
+namespace Modules\DummyModule\Observers;
+
+use Modules\DummyModule\Models\DummyModelClass;
+
+class DummyClassObserver
+{
+    /**
+     * Handle the DummyModelClass "created" event.
+     */
+    public function created(DummyModelClass $dummy_camel_case_singular): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DummyModelClass "updated" event.
+     */
+    public function updated(User $dummy_camel_case_singular): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DummyModelClass "deleted" event.
+     */
+    public function deleted(User $dummy_camel_case_singular): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DummyModelClass "restored" event.
+     */
+    public function restored(User $dummy_camel_case_singular): void
+    {
+        //
+    }
+
+    /**
+     * Handle the DummyModelClass "force deleted" event.
+     */
+    public function forceDeleted(User $dummy_camel_case_singular): void
+    {
+        //
+    }
+}

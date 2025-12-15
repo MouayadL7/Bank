@@ -1,0 +1,16 @@
+<?php
+
+namespace Modules\DummyModule\Repositories\Eloquent;
+
+use Modules\DummyModule\Repositories\Interfaces\DummySingularClassRepositoryInterface;
+use Modules\DummyModule\Models\DummySingularClass;
+
+class DummyClassRepository implements DummySingularClassRepositoryInterface
+{
+    protected $model;
+
+    public function __construct(DummySingularClass $model)
+    {
+        $this->model = $model;
+    }
+}

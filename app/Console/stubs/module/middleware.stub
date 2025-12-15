@@ -1,0 +1,23 @@
+<?php
+
+namespace Modules\DummyModule\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class DummyClassMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        // Perform actions before the request proceeds
+        // For example, check authentication or add headers
+
+        return $next($request);
+    }
+}

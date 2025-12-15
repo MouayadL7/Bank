@@ -1,0 +1,8 @@
+<?php
+
+namespace Modules\DummyModule\Repositories\Interfaces;
+
+interface DummyClassRepositoryInterface
+{
+    //
+}

@@ -1,0 +1,17 @@
+<?php
+
+// Modules/DummyModule/Helpers/dummy_singular_snake_case_helpers.php
+// No namespace declaration for helper files, but the path implies it.
+
+if (! function_exists('Modules\DummyModule\Helpers\dummySingularCamelCaseHelperFunction')) {
+    /**
+     * A generic helper function for the DummyModule.
+     *
+     * @param string $text
+     * @return string
+     */
+    function dummySingularCamelCaseHelperFunction(string $text): string
+    {
+        return "Hello from DummyModule Helper: " . $text;
+    }
+}

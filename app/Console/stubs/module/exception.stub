@@ -1,0 +1,16 @@
+<?php
+
+namespace Modules\DummyModule\Exceptions;
+
+use Modules\Core\Constants\HttpStatusConstants;
+use Modules\Core\Exceptions\ApiException;
+
+class DummyClassException extends ApiException
+{
+    protected int $statusCode = HttpStatusConstants::HTTP_400_BAD_REQUEST;
+
+    protected function getDefaultMessage(): string
+    {
+        return 'Default message.';
+    }
+}

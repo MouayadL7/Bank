@@ -1,0 +1,18 @@
+<?php
+
+namespace Modules\DummyModule\Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Modules\DummyModule\Models\DummyModelClass;
+
+class DummyClassSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        // Example: Create 10 DummyModelClass instances using its factory
+        // DummyModelClass::factory(10)->create();
+    }
+}
