@@ -22,7 +22,7 @@ return new class extends Migration
 
             // 3. ACCOUNT TYPE & STATE
             $table->enum('type', AccountType::values())
-                  ->default(AccountType::SAVINGS->value);
+                ->default(AccountType::SAVINGS->value);
 
             $table->enum('state', array_map(fn($e) => $e->value, AccountState::values()))
                     ->default(AccountState::ACTIVE->value);

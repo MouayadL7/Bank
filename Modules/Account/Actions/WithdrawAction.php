@@ -1,20 +1,27 @@
 <?php
 
-namespace Modules\Account\Actions;
+namespace Modules\Transaction\Actions;
 
-use Modules\Account\Models\Account;
+use Modules\Account\Events\AccountBalanceUpdated;
+use Modules\Transaction\Models\Transaction;
 
 class WithdrawAction
 {
-    public function execute(Account $account, float $amount): Account
+    public function execute(Transaction $transaction, float $amount): Transaction
     {
-        if ($account->balance < $amount) {
+        if ($transaction->balance < $amount) {
             throw new \DomainException("Insufficient funds");
         }
 
-        $account->balance -= $amount;
+        $transaction->balance -= $amount;
+        event(new AccountBalanceUpdated(
+            $transaction->account,
+            -$amount,
+            'withdraw' 
+        ));
 
-        return $account;
+        return $transaction;
     }
 }
+
 
