@@ -40,3 +40,4 @@ class CreateAccountRequest extends BaseFormRequest
         return AccountData::fromArray($this->validated());
     }
 }
+    
