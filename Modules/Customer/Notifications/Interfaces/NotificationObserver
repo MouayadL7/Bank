@@ -1,0 +1,8 @@
+<?php
+
+namespace Modules\Customer\Notifications\Interfaces;
+
+interface NotificationObserver
+{
+    public function notify(NotifiableEvent $event): void;
+}

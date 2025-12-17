@@ -1,20 +1,17 @@
 <?php
 
-namespace Modules\Transaction\Http\Requests;
+namespace Modules\Customer\Http\Requests;
 
-use App\Modules\Transaction\Enums\TransactionStatus;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 use Modules\Core\Http\Requests\BaseFormRequest;
 
-class UpdateTransactionRequest extends BaseFormRequest
+class StoreStoreCustomerRequestRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller') || Gate::allows('isManager');
+        return true;
     }
 
     /**
@@ -24,8 +21,6 @@ class UpdateTransactionRequest extends BaseFormRequest
      */
     public function rules(): array
     {
-        return [
-            'status'   => ['required', 'string', Rule::in(TransactionStatus::values())],
-        ];
+        return [];
     }
 }

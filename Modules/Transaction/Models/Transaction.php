@@ -9,27 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Account\Models\Account;
+use App\Models\User;
 
 class Transaction extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'from_account_id',
-        'to_account_id',
-        'balance',
-        'type',
-        'status',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
-        'type' => TransactionType::class,
-        'status' => TransactionStatus::class,
+        'amount'        => 'decimal:4',
+        'type'          => TransactionType::class,
+        'status'        => TransactionStatus::class,
+        'is_scheduled'  => 'boolean',
+        'scheduled_at'  => 'datetime',
     ];
 
     public function fromAccount(): BelongsTo
@@ -40,5 +33,10 @@ class Transaction extends Model
     public function toAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'to_account_id');
+    }
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

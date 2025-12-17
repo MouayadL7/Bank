@@ -1,0 +1,26 @@
+<?php
+
+namespace Modules\Customer\Notifications\Services;
+
+use Modules\Customer\Notifications\Interfaces\NotifiableEvent;
+use Modules\Customer\Notifications\Interfaces\NotificationObserver;
+
+class NotificationService
+{
+    /**
+     * @var NotificationObserver[]
+     */
+    private array $observers = [];
+
+    public function attach(NotificationObserver $observer): void
+    {
+        $this->observers[] = $observer;
+    }
+
+    public function notifyAll(NotifiableEvent $event): void
+    {
+        foreach ($this->observers as $observer) {
+            $observer->notify($event);
+        }
+    }
+}

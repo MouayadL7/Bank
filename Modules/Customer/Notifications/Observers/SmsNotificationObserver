@@ -1,0 +1,15 @@
+<?php
+
+namespace Modules\Customer\Notifications\Observers;
+
+use Modules\Customer\Notifications\Interfaces\NotifiableEvent;
+use Modules\Customer\Notifications\Interfaces\NotificationObserver;
+
+class SmsNotificationObserver implements NotificationObserver
+{
+    public function notify(NotifiableEvent $event): void
+    {
+        // لاحقاً: SMS Gateway
+        // حالياً: تنفيذ فارغ (Mock)
+    }
+}

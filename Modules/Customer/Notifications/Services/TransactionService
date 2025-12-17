@@ -1,0 +1,27 @@
+<?php
+namespace Modules\Customer\Notifications\Services;
+
+use Modules\Customer\Notifications\Services\NotificationService;
+use Modules\Customer\Notifications\Events\BalanceChangedEvent;
+use Modules\Customer\Notifications\Observers\EmailNotificationObserver;
+use Modules\Customer\Notifications\Observers\InAppNotificationObserver;
+
+class TransactionService
+{
+    public function deposit(int $accountId, float $amount): void
+    {
+        // ... منطق الإيداع
+
+        $event = new BalanceChangedEvent(
+            $accountId,
+            $oldBalance,
+            $newBalance
+        );
+
+        $notificationService = new NotificationService();
+        $notificationService->attach(new EmailNotificationObserver());
+        $notificationService->attach(new InAppNotificationObserver());
+
+        $notificationService->notifyAll($event);
+    }
+}

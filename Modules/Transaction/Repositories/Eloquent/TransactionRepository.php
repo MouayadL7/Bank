@@ -2,8 +2,10 @@
 
 namespace App\Modules\Transaction\Repositories;
 
+use App\Modules\Transaction\Enums\TransactionStatus;
 use Modules\Transaction\Models\Transaction;
-use App\Modules\Transaction\Repositories\TransactionRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {
@@ -14,7 +16,24 @@ class TransactionRepository implements TransactionRepositoryInterface
 
     public function update(Transaction $transaction, array $data): Transaction
     {
-        $transaction->update($data);  
+        $transaction->update($data);
         return $transaction;
+    }
+
+    /**
+     * جلب المعاملات المجدولة التي حان وقت تنفيذها
+     */
+    public function getExecutableScheduledTransactions(): Collection
+    {
+        return Transaction::where('is_scheduled', true)
+            ->where('scheduled_at', '<=', Carbon::now())
+            ->where('status', TransactionStatus::PENDING)
+            ->get();
+    }
+
+    public function markAsApproved(Transaction $transaction): void
+    {
+        $transaction->status = TransactionStatus::APPROVED;
+        $transaction->save();
     }
 }
