@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Modules\Core\Http\Requests\BaseFormRequest;
 
-class UpdateTransactionRequestRequest extends BaseFormRequest
+class UpdateTransactionRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller') && Gate::allows('isManager');
+        return Gate::allows('isTeller') || Gate::allows('isManager');
     }
 
     /**

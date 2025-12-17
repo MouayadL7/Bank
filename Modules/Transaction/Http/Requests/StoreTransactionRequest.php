@@ -14,7 +14,7 @@ class StoreTransactionRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller') && Gate::allows('isManager');
+        return Gate::allows('isTeller') || Gate::allows('isManager');
     }
 
     /**
