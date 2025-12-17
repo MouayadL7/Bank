@@ -28,4 +28,17 @@ class TransactionController extends BaseController
 
         return $this->successResponse($updated);
     }
+
+    public function approve(int $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $approved = $this->service->approveTransaction($transaction);
+
+        if ($approved) {
+            return $this->successResponse($transaction, 'Transaction approved successfully.');
+        }
+
+        return $this->errorResponse('Transaction could not be approved.');
+    }
+
 }

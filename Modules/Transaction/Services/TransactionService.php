@@ -8,6 +8,9 @@ use Modules\Transaction\Http\Resources\TransactionResource;
 use Modules\Transaction\Models\Transaction;
 use App\Modules\Transaction\Enums\TransactionType;
 use Modules\Account\Events\AccountBalanceUpdated;
+use Modules\Transaction\Handlers\TellerHandler;
+use Modules\Transaction\Handlers\ManagerHandler;
+use Modules\Transaction\Handlers\AdminHandler;
 
 class TransactionService
 {
@@ -68,5 +71,16 @@ class TransactionService
                     $transaction->toAccount->id
                 )),
         };
+    }
+
+    public function approveTransaction(Transaction $transaction): bool
+    {
+        $teller = new TellerHandler();
+        $manager = new ManagerHandler();
+        $admin = new AdminHandler();
+
+        $teller->setNext($manager)->setNext($admin);
+
+        return $teller->handle($transaction);
     }
 }
