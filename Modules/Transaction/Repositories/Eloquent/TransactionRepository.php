@@ -20,9 +20,6 @@ class TransactionRepository implements TransactionRepositoryInterface
         return $transaction;
     }
 
-    /**
-     * جلب المعاملات المجدولة التي حان وقت تنفيذها
-     */
     public function getExecutableScheduledTransactions(): Collection
     {
         return Transaction::where('is_scheduled', true)

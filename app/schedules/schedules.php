@@ -13,3 +13,4 @@ return function (\Illuminate\Console\Scheduling\Schedule $schedule) {
                 Log::error('Failed to process scheduled transactions.');
             });
 };
+    

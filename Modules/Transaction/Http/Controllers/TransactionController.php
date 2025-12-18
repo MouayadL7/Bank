@@ -12,14 +12,12 @@ class TransactionController extends BaseController
 {
     public function __construct(private TransactionFacade $facade) {}
 
-    // إنشاء معاملة
     public function store(StoreTransactionRequest $request)
     {
         $transaction = $this->facade->createTransaction($request->toDTO());
         return $this->successResponse($transaction);
     }
 
-    // تحديث معاملة
     public function update(UpdateTransactionRequest $request, int $id)
     {
         $transaction = Transaction::findOrFail($id);
@@ -28,7 +26,6 @@ class TransactionController extends BaseController
         return $this->successResponse($updated);
     }
 
-    // الموافقة على المعاملة
     public function approve(int $id)
     {
         $transaction = Transaction::findOrFail($id);
@@ -41,7 +38,6 @@ class TransactionController extends BaseController
         return $this->errorResponse('Transaction could not be approved.');
     }
 
-    // تنفيذ المعاملات المجدولة
     public function processScheduled()
     {
         $this->facade->processScheduled();
