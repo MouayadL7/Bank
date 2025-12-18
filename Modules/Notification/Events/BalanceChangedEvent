@@ -1,8 +1,9 @@
 <?php
 
-namespace Modules\Customer\Notifications\Events;
+namespace Modules\Notification\Events;
 
-use Modules\Customer\Notifications\Interfaces\NotifiableEvent;
+use Modules\Notification\Interfaces\NotifiableEvent;
+
 
 class BalanceChangedEvent implements NotifiableEvent
 {

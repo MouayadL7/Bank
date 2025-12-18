@@ -75,9 +75,9 @@ class TransactionService
 
     public function approveTransaction(Transaction $transaction): bool
     {
-        $teller = new TellerHandler();
+        $teller  = new TellerHandler();
         $manager = new ManagerHandler();
-        $admin = new AdminHandler();
+        $admin   = new AdminHandler();
 
         $teller->setNext($manager)->setNext($admin);
 
