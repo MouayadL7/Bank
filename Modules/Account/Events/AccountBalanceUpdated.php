@@ -1,18 +1,19 @@
 <?php
-// app/Modules/Account/Events/AccountBalanceUpdated.php
 
 namespace Modules\Account\Events;
 
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Modules\Account\Models\Account;
 
 class AccountBalanceUpdated
 {
-    use SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $account;
     public $amount;
-    public $transactionType;   
+    public $transactionType;
     public $fromAccountId;
     public $toAccountId;
 

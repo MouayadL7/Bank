@@ -13,14 +13,14 @@ class MakeModuleFactory extends Command
      *
      * @var string
      */
-    protected $signature = 'make:module-factory {module} {name} {--model=}';
+    protected $signature = 'make:module-factory {module} {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new module model factory.';
+    protected $description = 'Create a new module factory.';
 
     /**
      * The filesystem instance.
@@ -44,14 +44,20 @@ class MakeModuleFactory extends Command
     {
         $moduleName = Str::studly($this->argument('module'));
         $factoryName = Str::studly($this->argument('name')); // e.g., CourseFactory
-        $modelName = Str::studly($this->option('model') ?? Str::singular(str_replace('Factory', '', $factoryName))); // e.g., Course
 
         $modulePath = base_path("Modules/{$moduleName}");
-        $filePath = "{$modulePath}/Database/Factories/{$factoryName}Factory.php";
+        $targetDirectory = "{$modulePath}/Factories";
+        $filePath = "{$targetDirectory}/{$factoryName}Factory.php";
 
         if (!$this->files->isDirectory($modulePath)) {
             $this->error("Module '{$moduleName}' does not exist!");
             return Command::FAILURE;
+        }
+
+        // Ensure the target directory exists. Create it if it doesn't.
+        if (!$this->files->isDirectory($targetDirectory)) {
+            $this->files->makeDirectory($targetDirectory, 0755, true, true); // Recursive, force
+            $this->line("Created directory: <info>{$targetDirectory}</info>");
         }
 
         if ($this->files->exists($filePath)) {
@@ -65,12 +71,10 @@ class MakeModuleFactory extends Command
             [
                 'DummyModule',
                 'DummyClass',
-                'DummyModelClass',
             ],
             [
                 $moduleName,
                 $factoryName,
-                $modelName,
             ],
             $stub
         );

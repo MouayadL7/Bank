@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Transaction\Actions;
+namespace Modules\Account\Actions;
 
 use Modules\Account\Events\AccountBalanceUpdated;
 use Modules\Account\Models\Account;
@@ -39,7 +39,7 @@ class TransferAction
             $amount,
             'transfer',
             $from->id,
-            $to->id     
+            $to->id
         ));
     }
 }

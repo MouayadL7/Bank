@@ -3,8 +3,8 @@
 namespace Modules\AccessControl\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\AccessControl\Repositories\Interfaces\AccessControlRepositoryInterface;
-use Modules\AccessControl\Repositories\Eloquent\AccessControlRepository;
+use Modules\AccessControl\Repositories\Interfaces\RoleRepositoryInterface;
+use Modules\AccessControl\Repositories\Eloquent\RoleRepository;
 
 class AccessControlRepositoryServiceProvider extends ServiceProvider
 {
@@ -14,8 +14,8 @@ class AccessControlRepositoryServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            AccessControlRepositoryInterface::class,
-            AccessControlRepository::class
+            RoleRepositoryInterface::class,
+            RoleRepository::class
         );
     }
 

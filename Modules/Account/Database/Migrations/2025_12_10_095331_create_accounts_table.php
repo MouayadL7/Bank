@@ -24,12 +24,13 @@ return new class extends Migration
             $table->enum('type', AccountType::values())
                 ->default(AccountType::SAVINGS->value);
 
-            $table->enum('state', array_map(fn($e) => $e->value, AccountState::values()))
+            $table->enum('state', AccountState::values())
                     ->default(AccountState::ACTIVE->value);
 
             $table->decimal('balance', 18, 4)->default(0);
             $table->string('currency', 3)->default('USD');
 
+            $table->json('meta')->nullable();
 
             $table->timestamp('opened_at')->useCurrent();
             $table->timestamps();

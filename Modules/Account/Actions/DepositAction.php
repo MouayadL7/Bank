@@ -1,22 +1,17 @@
 <?php
-namespace Modules\Transaction\Actions;
+namespace Modules\Account\Actions;
 
-use Modules\Account\Events\AccountBalanceUpdated;
-use Modules\Transaction\Models\Transaction;
+use Modules\Account\Factories\AccountComponentFactory;
+use Modules\Account\Models\Account;
 
 class DepositAction
 {
-    public function execute(Transaction $transaction, float $amount): Transaction
+    public function execute(Account $account, float $amount): Account
     {
-        $transaction->balance += $amount;
+        $component = AccountComponentFactory::make($account);
+        $component->deposit($amount);
 
-        event(new AccountBalanceUpdated(
-            $transaction->account,
-            $amount,
-            'deposit'   
-        ));
-
-        return $transaction;
+        return $account;
     }
 }
 

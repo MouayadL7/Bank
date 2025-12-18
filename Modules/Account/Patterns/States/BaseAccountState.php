@@ -1,9 +1,8 @@
 <?php
 
-namespace Modules\Accounts\Domain\States;
+namespace Modules\Account\Patterns\States;
 
 use Modules\Account\Models\Account;
-use Modules\Account\Enums\AccountState;
 
 abstract class BaseAccountState implements AccountStateInterface
 {

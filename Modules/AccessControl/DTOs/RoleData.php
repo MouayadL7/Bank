@@ -2,11 +2,9 @@
 
 namespace Modules\AccessControl\DTOs;
 
-use Modules\Core\Http\Requests\BaseFormRequest;
-
 class RoleData
 {
-    public function __construct() {}
+    public function __construct(public string $name) {}
 
     /**
      * Create a new DTO instance from an array.
@@ -16,18 +14,9 @@ class RoleData
      */
     public static function fromArray(array $data): static
     {
-        return new static();
-    }
-
-    /**
-     * Create a new DTO instance from a request.
-     *
-     * @param BaseFormRequest
-     * @return self
-     */
-    public static function fromRequest(BaseFormRequest $request): self
-    {
-        return new self();
+        return new static(
+            name: $data['name']
+        );
     }
 
     /**
@@ -37,6 +26,8 @@ class RoleData
      */
     public function toArray(): array
     {
-        return [];
+        return [
+            'name' => $this->name,
+        ];
     }
 }

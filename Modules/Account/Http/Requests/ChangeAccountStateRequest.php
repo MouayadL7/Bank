@@ -1,20 +1,20 @@
 <?php
 
-namespace Modules\AccessControl\Http\Requests;
+namespace Modules\Account\Http\Requests;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
-use Modules\AccessControl\DTOs\RoleData;
+use Modules\Account\Enums\AccountState;
 use Modules\Core\Http\Requests\BaseFormRequest;
 
-class StoreRoleRequest extends BaseFormRequest
+class ChangeAccountStateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('isAdmin');
+        return Gate::allows('isTeller');
     }
 
     /**
@@ -25,12 +25,7 @@ class StoreRoleRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', Rule::unique('roles', 'name')->whereNull('deleted_at')],
+            'state' => ['required', Rule::in(AccountState::values())],
         ];
-    }
-
-    public function toDTO(): RoleData
-    {
-        return RoleData::fromArray($this->validated());
     }
 }

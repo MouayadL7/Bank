@@ -2,15 +2,19 @@
 
 namespace Modules\AccessControl\Repositories\Eloquent;
 
+use Illuminate\Database\Eloquent\Collection;
 use Modules\AccessControl\Repositories\Interfaces\RoleRepositoryInterface;
 use Modules\AccessControl\Models\Role;
 
 class RoleRepository implements RoleRepositoryInterface
 {
-    protected $model;
-
-    public function __construct(Role $model)
+    public function all(): Collection
     {
-        $this->model = $model;
+        return Role::all();
+    }
+
+    public function create(array $data): Role
+    {
+        return Role::create($data);
     }
 }
