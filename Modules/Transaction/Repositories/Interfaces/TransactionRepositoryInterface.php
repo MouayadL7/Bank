@@ -11,7 +11,6 @@ interface TransactionRepositoryInterface
 
     public function update(Transaction $transaction, array $data): Transaction;
 
-    // Scheduled transactions
     public function getExecutableScheduledTransactions(): Collection;
 
     public function markAsApproved(Transaction $transaction): void;

@@ -13,28 +13,16 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
 
-            // From account can be nullable (deposit case)
-            $table->foreignId('from_account_id')
-                ->nullable()
-                ->constrained('accounts')
-                ->onDelete('cascade');
+            $table->foreignId('from_account_id')->constrained('accounts')->onDelete('cascade');
+            $table->foreignId('to_account_id')->constrained('accounts')->onDelete('cascade');
 
-            $table->foreignId('to_account_id')
-                ->constrained('accounts')
-                ->onDelete('cascade');
-
-            // Transaction amount
             $table->decimal('amount', 18, 4);
 
-            // Transaction workflow
             $table->enum('type', TransactionType::values());
-            $table->enum('status', TransactionStatus::values())
-                ->default(TransactionStatus::PENDING->value);
+            $table->enum('status', TransactionStatus::values())->default(TransactionStatus::PENDING->value);
 
             // Authorization (Chain of Responsibility support)
-            $table->foreignId('approved_by')
-                ->nullable()
-                ->constrained('users');
+            $table->foreignId('approved_by')->nullable()->constrained('users');
 
             // Scheduled transactions
             $table->boolean('is_scheduled')->default(false);
