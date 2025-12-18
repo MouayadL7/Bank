@@ -17,6 +17,12 @@ class SupportTicketController extends BaseController
         $this->service = $service;
     }
 
+    public function index()
+    {
+        $tickets = $this->service->getAllTickets();
+        return $this->successResponse($tickets);
+    }
+
     public function store(StoreSupportTicketRequest $request)
     {
         $ticketResource = $this->service->create($request->toDTO());

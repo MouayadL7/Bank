@@ -9,6 +9,13 @@ class SupportTicketRepository implements SupportTicketRepositoryInterface
 {
     protected $model;
 
+    public function getAllTickets()
+    {
+        return SupportTicket::select('id', 'customer_id', 'title', 'description', 'status', 'created_at', 'updated_at')
+            ->with(['customer']) 
+            ->get();
+    }
+
     public function create(array $data): SupportTicket
     {
         return SupportTicket::create($data);
