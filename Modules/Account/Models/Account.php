@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Account\Enums\AccountState;
 use Modules\Account\Enums\AccountType;
+use Modules\Account\Patterns\States\{
+    AccountStateInterface,
+    ActiveState,
+    FrozenState,
+    SuspendedState,
+    ClosedState
+};
 
 class Account extends Model
 {
@@ -30,18 +37,28 @@ class Account extends Model
     {
         return [
             'balance' => 'decimal:4',
-            'type' => AccountType::class,
-            'state' => AccountState::class,
+            'type'    => AccountType::class,
+            'state'   => AccountState::class,
         ];
     }
 
     public function children()
     {
-        return $this->hasMany(AccountModel::class, 'parent_account_id');
+        return $this->hasMany(self::class, 'parent_account_id');
     }
 
     public function parent()
     {
         return $this->belongsTo(AccountModel::class, 'parent_account_id');
+    }
+
+    public function getStateInstance(): AccountStateInterface
+    {
+        return $this->state->resolve();
+    }
+
+    public function isComposite(): bool
+    {
+        return $this->children()->exists();
     }
 }

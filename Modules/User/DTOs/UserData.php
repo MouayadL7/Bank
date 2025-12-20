@@ -4,7 +4,13 @@ namespace Modules\User\DTOs;
 
 class UserData
 {
-    public function __construct() {}
+    public function __construct(
+        public string $name,
+        public string $email,
+        public string $password,
+        public int $roleId,
+        public string $status,
+    ) {}
 
     /**
      * Create a new DTO instance from an array.
@@ -14,7 +20,13 @@ class UserData
      */
     public static function fromArray(array $data): self
     {
-        return new self();
+        return new self(
+            name: $data['name'],
+            email: $data['email'],
+            password: $data['password'],
+            roleId: $data['role_id'],
+            status: $data['status'],
+        );
     }
 
     /**
@@ -24,6 +36,13 @@ class UserData
      */
     public function toArray(): array
     {
-        return [];
+        return [
+            'uuid'     => \Illuminate\Support\Str::uuid()->toString(),
+            'name'     => $this->name,
+            'email'    => $this->email,
+            'password' => $this->password,
+            'role_id'  => $this->roleId,
+            'status'   => $this->status,
+        ];
     }
 }

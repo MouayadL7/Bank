@@ -3,49 +3,46 @@
 namespace Modules\User\Http\Controllers;
 
 use Modules\Core\Http\Controllers\BaseController;
-use Illuminate\Http\Request;
+use Modules\User\Http\Requests\UserListRequest;
+use Modules\User\Http\Requests\UserSearchRequest;
+use Modules\User\Services\UserService;
 
 class UserController extends BaseController
 {
-    public function __construct() {}
+    public function __construct(private UserService $userService) {}
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(UserListRequest $request)
     {
-        //
+        $users = $this->userService->list($request->validated());
+
+        return $this->successResponse($users);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function search(UserSearchRequest $request)
     {
-        //
+        $users = $this->userService->search($request->validated());
+
+        return $this->successResponse($users);
     }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function show(string $uuid)
     {
-        //
+        $user = $this->userService->getByUuid($uuid);
+
+        return $this->successResponse($user);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function suspend(string $uuid)
     {
-        //
+        $user = $this->userService->suspend($uuid);
+
+        return $this->successResponse($user);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function activate(string $uuid)
     {
-        //
+        $user = $this->userService->activate($uuid);
+
+        return $this->successResponse($user);
     }
 }

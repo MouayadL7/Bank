@@ -1,17 +1,18 @@
 <?php
 
-namespace Modules\AccessControl\Http\Requests;
+namespace Modules\Account\Http\Requests;
 
+use Illuminate\Support\Facades\Gate;
 use Modules\Core\Http\Requests\BaseFormRequest;
 
-class UpdateUpdateAccessControlRequestRequest extends BaseFormRequest
+class ChangeParentAccountRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('isTeller');
     }
 
     /**
@@ -21,6 +22,8 @@ class UpdateUpdateAccessControlRequestRequest extends BaseFormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'parent_uuid' => ['nullable', 'uuid', 'exists:accounts,uuid'],
+        ];
     }
 }

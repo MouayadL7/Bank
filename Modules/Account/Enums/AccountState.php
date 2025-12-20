@@ -2,6 +2,14 @@
 
 namespace Modules\Account\Enums;
 
+use Modules\Account\Patterns\States\{
+    AccountStateInterface,
+    ActiveState,
+    FrozenState,
+    SuspendedState,
+    ClosedState
+};
+
 enum AccountState: string
 {
     case ACTIVE    = 'active';
@@ -12,6 +20,16 @@ enum AccountState: string
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    public function resolve(): AccountStateInterface
+    {
+        return match ($this) {
+            self::ACTIVE => new ActiveState(),
+            self::FROZEN => new FrozenState(),
+            self::SUSPENDED => new SuspendedState(),
+            self::CLOSED => new ClosedState(),
+        };
     }
 
     public function label(): string

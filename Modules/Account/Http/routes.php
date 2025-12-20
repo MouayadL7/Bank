@@ -20,6 +20,14 @@ Route::prefix('api/accounts')->group(function () {
     Route::post('/', [AccountController::class, 'store']);
     Route::get('{uuid}', [AccountController::class, 'show']);
 
+    // close & state
+    Route::post('{uuid}/close', [AccountController::class, 'close']);
+    Route::post('{uuid}/state', [AccountController::class, 'changeState']);
+
+    // update
+    Route::patch('{uuid}/meta', [AccountController::class, 'updateMeta']);
+    Route::patch('{uuid}/parent', [AccountController::class, 'changeParent']);
+
     // transaction-like endpoints
     Route::prefix('{uuid}/transactions')->group(function () {
         Route::post('deposit', [AccountController::class, 'deposit']);

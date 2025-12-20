@@ -15,7 +15,7 @@ class CreateAccountRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller');
+        return Gate::allows('isTeller') || Gate::allows('isCustomer');
     }
 
     /**
@@ -40,4 +40,3 @@ class CreateAccountRequest extends BaseFormRequest
         return AccountData::fromArray($this->validated());
     }
 }
-    

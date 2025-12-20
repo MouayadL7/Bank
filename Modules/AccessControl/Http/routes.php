@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\AccessControl\Http\Controllers\AccessControlController;
+use Modules\AccessControl\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +14,7 @@ use Modules\AccessControl\Http\Controllers\AccessControlController;
 | which contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::apiResource('roles', RoleController::class)->only(['index', 'store'])
+    ->middleware(['auth:api', 'can:isAdmin']);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Accounts\Domain\States;
+namespace Modules\Account\Patterns\States;
 
 use Modules\Account\Models\Account;
 
