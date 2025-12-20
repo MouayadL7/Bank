@@ -2,8 +2,8 @@
 
 namespace Modules\Transaction\Models;
 
-use App\Modules\Transaction\Enums\TransactionStatus;
-use App\Modules\Transaction\Enums\TransactionType;
+use Modules\Transaction\Enums\TransactionStatus;
+use Modules\Transaction\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +24,18 @@ class Transaction extends Model
         'is_scheduled'  => 'boolean',
         'scheduled_at'  => 'datetime',
     ];
+
+    public function isApproved(): bool
+    {
+        return $this->status === TransactionStatus::APPROVED;
+    }
+
+    public function approve(int $approvedBy)
+    {
+        $this->approved_by = $approvedBy;
+        $this->approved_at = now();
+        $this->save();
+    }
 
     public function fromAccount(): BelongsTo
     {

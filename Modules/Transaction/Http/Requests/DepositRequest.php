@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Account\Http\Requests;
+namespace Modules\Transaction\Http\Requests;
 
 use Illuminate\Support\Facades\Gate;
 use Modules\Core\Http\Requests\BaseFormRequest;
@@ -12,7 +12,7 @@ class DepositRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller');
+        return Gate::allows('isTeller') || Gate::allows('isCustomer');
     }
 
     /**

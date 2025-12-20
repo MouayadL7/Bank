@@ -5,11 +5,8 @@ namespace Modules\Account\Services;
 use Illuminate\Support\Facades\DB;
 use Modules\Account\Actions\ChangeParentAccountAction;
 use Modules\Account\Actions\CloseAccountAction;
-use Modules\Account\Actions\DepositAction;
 use Modules\Account\Actions\UpdateAccountMetaAction;
-use Modules\Account\Actions\WithdrawAction;
 use Modules\Account\DTOs\AccountData;
-use Modules\Account\Events\AccountBalanceUpdated;
 use Modules\Account\Events\AccountClosed;
 use Modules\Account\Events\AccountStateChanged;
 use Modules\Account\Repositories\Interfaces\AccountRepositoryInterface;
@@ -19,8 +16,6 @@ class AccountService
 {
     public function __construct(
         private AccountRepositoryInterface $repo,
-        private DepositAction $depositAction,
-        private WithdrawAction $withdrawAction,
         private CloseAccountAction $closeAccountAction,
         private UpdateAccountMetaAction $updateAccountMetaAction,
         private ChangeParentAccountAction $changeParentAccountAction,
@@ -45,49 +40,6 @@ class AccountService
         $model = $this->repo->create($dto->toArray());
 
         return new AccountResource($model);
-    }
-
-    public function deposit(string $uuid, float $amount, ?int $byUserId = null): AccountResource
-    {
-        return DB::transaction(function() use ($uuid, $amount, $byUserId) {
-            $account = $this->repo->findByUuid($uuid);
-
-            // apply domain rules
-            $updatedAccount = $this->depositAction->execute($account, $amount);
-
-            // persist changes
-            $this->repo->save($updatedAccount);
-
-            // events are not responsibility of this method
-            event(new AccountBalanceUpdated(
-                $account,
-                $amount,
-                'deposit'
-            ));
-
-            return new AccountResource($updatedAccount);
-        });
-    }
-
-    public function withdraw(string $uuid, float $amount, ?int $byUserId = null): AccountResource
-    {
-        return DB::transaction(function() use ($uuid, $amount, $byUserId) {
-            $account = $this->repo->findByUuid($uuid);
-
-            // apply domain rules
-            $updatedAccount = $this->withdrawAction->execute($account, $amount);
-
-            // persist
-            $this->repo->save($updatedAccount);
-
-            event(new AccountBalanceUpdated(
-                $account,
-                -$amount,
-                'withdraw'
-            ));
-
-            return new AccountResource($updatedAccount);
-        });
     }
 
     public function changeState(string $uuid, string $newState): AccountResource
