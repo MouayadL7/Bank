@@ -7,10 +7,21 @@ use Modules\User\Models\User;
 
 class UserRepository implements UserRepositoryInterface
 {
-    protected $model;
-
-    public function __construct(User $model)
+    public function list(array $filters)
     {
-        $this->model = $model;
+        return User::with('role')
+            ->filter($filters)
+            ->paginate($filters['per_page'] ?? 15);
+    }
+
+    public function findByUuid(string $uuid): User
+    {
+        return User::where('uuid', $uuid)->firstOrFail();
+    }
+
+    public function save(User $user): User
+    {
+        $user->save();
+        return $user;
     }
 }
