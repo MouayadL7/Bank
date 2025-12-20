@@ -11,7 +11,7 @@ class TransactionDTO
     public function __construct(
         public ?int $from_account_id,
         public int $to_account_id,
-        public float $amount,
+        public string  $amount,
         public TransactionType $type,
         public bool $is_scheduled = false,
         public ?DateTimeInterface $scheduled_at = null,
@@ -23,12 +23,10 @@ class TransactionDTO
         return new self(
             from_account_id: $data['from_account_id'] ?? null,
             to_account_id:   $data['to_account_id'],
-            amount:          (float) $data['amount'],
+            amount:          (string) $data['amount'],
             type:            TransactionType::from($data['type']),
             is_scheduled:    $data['is_scheduled'] ?? false,
-            scheduled_at:    isset($data['scheduled_at'])
-                ? new \DateTime($data['scheduled_at'])
-                : null,
+            scheduled_at:    isset($data['scheduled_at'])? new \DateTime($data['scheduled_at']): null,
         );
     }
 

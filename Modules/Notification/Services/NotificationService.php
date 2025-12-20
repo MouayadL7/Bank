@@ -2,8 +2,8 @@
 
 namespace Modules\Customer\Notifications\Services;
 
-use Modules\Customer\Notifications\Interfaces\NotifiableEvent;
-use Modules\Customer\Notifications\Interfaces\NotificationObserver;
+use Modules\Notification\Interfaces\NotifiableEvent;
+use Modules\Notification\Interfaces\NotificationObserver;
 
 class NotificationService
 {
