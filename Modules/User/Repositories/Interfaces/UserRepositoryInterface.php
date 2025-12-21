@@ -8,5 +8,6 @@ interface UserRepositoryInterface
 {
     public function list(array $filters);
     public function findByUuid(string $uuid): User;
+    public function findByEmail(string $email): User;
     public function save(User $user): User;
 }

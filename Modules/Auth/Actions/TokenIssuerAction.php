@@ -4,10 +4,11 @@ namespace Modules\Auth\Actions;
 
 use Modules\User\Models\User;
 
-class TokenIssuer
+class TokenIssuerAction
 {
     public function issue(User $user): string
     {
+        $user->tokens()->delete();
         return $user->createToken('api')->plainTextToken;
     }
 }

@@ -3,14 +3,14 @@
 namespace Modules\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\AccessControl\Models\Role;
 use Modules\User\Enums\UserStatus;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasFactory,SoftDeletes,Notifiable,HasApiTokens;
 
@@ -47,7 +47,7 @@ class User extends Model
 
     public function isActive(): bool
     {
-        return $this->status === UserStatus::ACTIVE;
+        return $this->status == UserStatus::ACTIVE->value;
     }
 
     // Scopes

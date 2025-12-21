@@ -2,20 +2,20 @@
 
 namespace Modules\Auth\Services;
 
-use Modules\Auth\Actions\Authenticator;
-use Modules\Auth\Actions\RevokeToken;
-use Modules\Auth\Actions\UserStatusChecker;
-use Modules\Auth\Actions\TokenIssuer;
+use Modules\Auth\Actions\AuthenticatorAction;
+use Modules\Auth\Actions\RevokeTokenAction;
+use Modules\Auth\Actions\UserStatusCheckerAction;
+use Modules\Auth\Actions\TokenIssuerAction;
 use Modules\User\Http\Resources\UserResource;
 use Modules\User\Models\User;
 
 class AuthService
 {
     public function __construct(
-        private Authenticator $authenticator,
-        private UserStatusChecker $statusChecker,
-        private TokenIssuer $tokenIssuer,
-        private RevokeToken $revokeToken
+        private AuthenticatorAction $authenticator,
+        private UserStatusCheckerAction $statusChecker,
+        private TokenIssuerAction $tokenIssuer,
+        private RevokeTokenAction $revokeToken
     ) {}
 
     public function login(string $email, string $password)
