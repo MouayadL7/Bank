@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Accounts\Http\Resources;
+namespace Modules\Account\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\User\Http\Resources\UserResource;

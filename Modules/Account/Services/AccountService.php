@@ -10,7 +10,7 @@ use Modules\Account\DTOs\AccountData;
 use Modules\Account\Events\AccountClosed;
 use Modules\Account\Events\AccountStateChanged;
 use Modules\Account\Repositories\Interfaces\AccountRepositoryInterface;
-use Modules\Accounts\Http\Resources\AccountResource;
+use Modules\Account\Http\Resources\AccountResource;
 
 class AccountService
 {
