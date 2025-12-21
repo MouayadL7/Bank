@@ -2,7 +2,7 @@
 
 namespace Modules\Transaction\Enums;
 
-enum TransactionType: string
+enum TransactionTypeEnum: string
 {
     case DEPOSIT    = 'deposit';
     case WITHDRAWAL = 'withdrawal';

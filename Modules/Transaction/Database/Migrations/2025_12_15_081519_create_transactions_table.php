@@ -1,7 +1,7 @@
 <?php
 
-use Modules\Transaction\Enums\TransactionStatus;
-use Modules\Transaction\Enums\TransactionType;
+use Modules\Transaction\Enums\TransactionStatusEnum;
+use Modules\Transaction\Enums\TransactionTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,6 +10,7 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
 
@@ -18,8 +19,8 @@ return new class extends Migration
 
             $table->decimal('amount', 18, 4);
 
-            $table->enum('type', TransactionType::values());
-            $table->enum('status', TransactionStatus::values())->default(TransactionStatus::PENDING->value);
+            $table->enum('type', TransactionTypeEnum::values());
+            $table->enum('status', TransactionStatusEnum::values())->default(TransactionStatusEnum::PENDING->value);
 
             // Authorization (Chain of Responsibility support)
             $table->foreignId('approved_by')->nullable()->constrained('users');
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     public function down()

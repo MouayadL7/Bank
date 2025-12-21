@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('account_id');
@@ -20,10 +21,11 @@ return new class extends Migration
             $table->string('type', 50);
             $table->json('data');
             $table->timestamps();
-            $table->softDeletes(); 
+            $table->softDeletes();
 
             $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
