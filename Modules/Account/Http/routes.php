@@ -17,6 +17,7 @@ use Modules\Account\Http\Controllers\AccountController;
 Route::prefix('api/accounts')->group(function () {
 
     // create & show
+    Route::get('/', [AccountController::class, 'index']);
     Route::post('/', [AccountController::class, 'store']);
     Route::get('{uuid}', [AccountController::class, 'show']);
 
@@ -27,12 +28,5 @@ Route::prefix('api/accounts')->group(function () {
     // update
     Route::patch('{uuid}/meta', [AccountController::class, 'updateMeta']);
     Route::patch('{uuid}/parent', [AccountController::class, 'changeParent']);
-
-    // transaction-like endpoints
-    Route::prefix('{uuid}/transactions')->group(function () {
-        Route::post('deposit', [AccountController::class, 'deposit']);
-        Route::post('withdraw', [AccountController::class, 'withdraw']);
-        // Route::post('transfer', [AccountController::class, 'transfer']);  ← لاحقًا
-    });
 });
 

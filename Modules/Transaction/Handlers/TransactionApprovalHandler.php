@@ -3,9 +3,7 @@ namespace Modules\Transaction\Handlers;
 
 use Modules\Transaction\Models\Transaction;
 
-interface ApprovalInterface
+interface TransactionApprovalHandler
 {
-    public function setNext(ApprovalInterface $handler): ApprovalInterface;
-
     public function handle(Transaction $transaction): bool;
 }

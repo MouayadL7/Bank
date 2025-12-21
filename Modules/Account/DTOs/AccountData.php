@@ -12,6 +12,7 @@ class AccountData
         public string $type,
         public float $balance,
         public string $currency,
+        public array $meta,
         public ?int $parent_account_id,
     ) {}
 
@@ -29,6 +30,7 @@ class AccountData
             type: $data['type'] ?? AccountType::SAVINGS->value,
             balance: floatval($data['balance'] ?? 0),
             currency: $data['currency'] ?? 'USD',
+            meta: $data['meta'] ?? [],
             parent_account_id: $data['parent_account_id'] ?? null,
         );
     }
@@ -41,11 +43,12 @@ class AccountData
     public function toArray(): array
     {
         return [
-            'uuid' => $this->uuid,
-            'customer_id' => $this->customer_id,
-            'type' => $this->type,
-            'balance' => $this->balance,
-            'currency' => $this->currency,
+            'uuid'              => $this->uuid,
+            'customer_id'       => $this->customer_id,
+            'type'              => $this->type,
+            'balance'           => $this->balance,
+            'currency'          => $this->currency,
+            'meta'              => $this->meta,
             'parent_account_id' => $this->parent_account_id,
         ];
     }

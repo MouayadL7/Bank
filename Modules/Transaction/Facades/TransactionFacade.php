@@ -11,17 +11,22 @@ class TransactionFacade
 
     public function __construct(TransactionService $service)
     {
-        $this->service = $service;
+        return $this->service = $service;
     }
 
-    public function createTransaction(TransactionDTO $dto)
+    public function deposit(string $uuid, float $amount)
     {
-        return $this->service->create($dto);
+        return $this->service->deposit($uuid, $amount);
     }
 
-    public function updateTransaction(Transaction $transaction, TransactionDTO $dto)
+    public function withdraw(string $uuid, float $amount)
     {
-        return $this->service->update($transaction, $dto);
+        return $this->service->withdraw($uuid, $amount);
+    }
+
+    public function transfer(string $fromUuid, string $toUuid, float $amount)
+    {
+        $this->service->transfare($fromUuid, $toUuid, $amount);
     }
 
     public function processScheduled()

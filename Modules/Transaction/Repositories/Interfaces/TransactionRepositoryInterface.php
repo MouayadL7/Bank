@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Transaction\Repositories;
+namespace Modules\Transaction\Repositories\Interfaces;
 
 use Modules\Transaction\Models\Transaction;
 use Illuminate\Support\Collection;

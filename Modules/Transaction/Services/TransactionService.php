@@ -2,37 +2,158 @@
 
 namespace App\Modules\Transaction\Services;
 
-use App\Modules\Transaction\Repositories\TransactionRepositoryInterface;
-use Modules\Transaction\DTOs\TransactionDTO;
-use Modules\Transaction\Http\Resources\TransactionResource;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Modules\Transaction\Models\Transaction;
-use App\Modules\Transaction\Enums\TransactionType;
-use Modules\Account\Events\AccountBalanceUpdated;
-use Modules\Transaction\Handlers\TellerHandler;
-use Modules\Transaction\Handlers\ManagerHandler;
-use Modules\Transaction\Handlers\AdminHandler;
+use Modules\Transaction\Enums\TransactionType;
+use Illuminate\Support\Facades\DB;
+use Modules\Account\Repositories\Interfaces\AccountRepositoryInterface;
+use Modules\Transaction\Actions\DepositAction;
+use Modules\Transaction\Actions\TransferAction;
+use Modules\Transaction\Actions\WithdrawAction;
+use Modules\Transaction\Events\AccountBalanceUpdated;
+use Modules\Transaction\Handlers\AutoApproveHandler;
+use Modules\Transaction\Http\Resources\TransactionResource;
+use Modules\Transaction\Repositories\Interfaces\TransactionRepositoryInterface;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TransactionService
 {
+    use AuthorizesRequests;
+
     public function __construct(
-        private TransactionRepositoryInterface $repository
+        private TransactionRepositoryInterface $repository,
+        private AccountRepositoryInterface $accountRepository,
+        private DepositAction $depositAction,
+        private WithdrawAction $withdrawAction,
+        private TransferAction $transferAction,
+        private AutoApproveHandler $autoApproveHandler
     ) {}
 
-    public function create(TransactionDTO $dto): TransactionResource
+    public function createTransaction(int $from, int $to, $amount, string $type, bool $isScheduled = false, ?Carbon $scheduledAt = null)
     {
-        $transaction = $this->repository->create($dto->toArray());
-
-        if (!$transaction->is_scheduled) {
-            $this->dispatchTransactionEvent($transaction);
-        }
+        return $transaction = $this->repository->create([
+            'from_account_id' => $from,
+            'to_account_id' => $to,
+            'amount' => $amount,
+            'type' => $type,
+            'is_scheduled' => $isScheduled,
+            'scheduled_at' => $scheduledAt,
+        ]);
 
         return new TransactionResource($transaction);
     }
 
-    public function update(Transaction $transaction, TransactionDTO $dto): TransactionResource
+    public function deposit(string $uuid, float $amount, ?int $byUserId = null): TransactionResource
     {
-        $transaction = $this->repository->update($transaction, $dto->toArray());
-        return new TransactionResource($transaction);
+        $this->authorize('deposit', $uuid);
+
+        return DB::transaction(function() use ($uuid, $amount, $byUserId) {
+            $account = $this->accountRepository->findByUuid($uuid);
+
+            // Store new transaction
+            $transaction = $this->createTransaction(
+                from: $account->id,
+                to: $account->id,
+                amount: $amount,
+                type: TransactionType::DEPOSIT->value
+            );
+
+            // Transaction Handler
+            $this->autoApproveHandler->handle($transaction);
+
+            if ($transaction->isApproved()) {
+                // apply domain rules
+                $updatedAccount = $this->depositAction->execute($account, $amount);
+
+                // persist changes
+                $this->accountRepository->save($updatedAccount);
+
+                // events are not responsibility of this method
+                event(new AccountBalanceUpdated(
+                    fromAccount: $account,
+                    toAccount: $account,
+                    amount: $amount,
+                    transactionType: TransactionType::DEPOSIT->value
+                ));
+            }
+
+            return new TransactionResource($transaction);
+        });
+    }
+
+    public function withdraw(string $uuid, float $amount, ?int $byUserId = null)
+    {
+        $this->authorize('withdraw', $uuid);
+
+        DB::transaction(function() use ($uuid, $amount, $byUserId) {
+            $account = $this->accountRepository->findByUuid($uuid);
+
+            // Store new transaction
+            $transaction = $this->createTransaction(
+                from: $account->id,
+                to: $account->id,
+                amount: $amount,
+                type: TransactionType::WITHDRAWAL->value,
+            );
+
+            // Transaction Handler
+            $this->autoApproveHandler->handle($transaction);
+
+            if ($transaction->isApproved()) {
+                // apply domain rules
+                $updatedAccount = $this->withdrawAction->execute($account, $amount);
+
+                // persist changes
+                $this->accountRepository->save($updatedAccount);
+
+                // events are not responsibility of this method
+                event(new AccountBalanceUpdated(
+                    fromAccount: $account,
+                    toAccount: $account,
+                    amount: $amount,
+                    transactionType: TransactionType::WITHDRAWAL->value
+                ));
+            }
+        });
+    }
+
+    public function transfare(string $fromUUID, string $toUUID, float $amount)
+    {
+        $this->authorize('transfer', $fromUUID);
+
+        DB::transaction(function () use ($fromUUID, $toUUID, $amount) {
+            $fromAccount = $this->accountRepository->findByUuid($fromUUID);
+            $toAccount = $this->accountRepository->findByUuid($toUUID);
+
+            // Store new transaction
+            $transaction = $this->createTransaction(
+                from: $fromAccount->id,
+                to: $toAccount->id,
+                amount: $amount,
+                type: TransactionType::TRANSFER->value,
+            );
+
+            // Transaction Handler
+            $this->autoApproveHandler->handle($transaction);
+
+            if ($transaction->isApproved()) {
+                // apply domain rules
+                $this->transferAction->execute($fromAccount, $toAccount, $amount);
+
+                // persist changes
+                $this->accountRepository->save($fromAccount);
+                $this->accountRepository->save($toAccount);
+
+                // events are not responsibility of this method
+                event(new AccountBalanceUpdated(
+                    $fromAccount,
+                    $toAccount,
+                    $amount,
+                    TransactionType::TRANSFER->value
+                ));
+            }
+        });
     }
 
     public function processScheduledTransactions(): void
@@ -73,14 +194,65 @@ class TransactionService
         };
     }
 
-    public function approveTransaction(Transaction $transaction): bool
+    public function approveTransaction(Transaction $transaction)
     {
-        $teller  = new TellerHandler();
-        $manager = new ManagerHandler();
-        $admin   = new AdminHandler();
+        // Check if transaction already been Approved
+        if ($transaction->isApproved()) {
+            throw new \Exception('Transaction has already been approved.');
+        }
 
-        $teller->setNext($manager)->setNext($admin);
+        $fromAccount = $transaction->fromAccount;
+        $toAccount = $transaction->toAccount;
+        $amount = $transaction->amount;
 
-        return $teller->handle($transaction);
+        // Approve Transaction
+        $transaction->approve(Auth::id());
+
+        if ($transaction->type === TransactionType::DEPOSIT) {
+            // apply domain rules
+            $updatedAccount = $this->depositAction->execute($fromAccount, $amount);
+
+            // persist changes
+            $this->accountRepository->save($updatedAccount);
+
+            // events are not responsibility of this method
+            event(new AccountBalanceUpdated(
+                fromAccount: $fromAccount,
+                toAccount: $toAccount,
+                amount: $amount,
+                transactionType: TransactionType::DEPOSIT->value
+            ));
+        }
+        else if ($transaction->type === TransactionType::WITHDRAWAL) {
+            // apply domain rules
+            $updatedAccount = $this->withdrawAction->execute($fromAccount, $amount);
+
+            // persist changes
+            $this->accountRepository->save($updatedAccount);
+
+            // events are not responsibility of this method
+            event(new AccountBalanceUpdated(
+                fromAccount: $fromAccount,
+                toAccount: $toAccount,
+                amount: $amount,
+                transactionType: TransactionType::WITHDRAWAL->value
+            ));
+        }
+        else {
+            // apply domain rules
+            $this->transferAction->execute($fromAccount, $toAccount, $amount);
+
+            // persist changes
+            $this->accountRepository->save($fromAccount);
+            $this->accountRepository->save($toAccount);
+
+            // events are not responsibility of this method
+            event(new AccountBalanceUpdated(
+                $fromAccount,
+                $toAccount,
+                $amount,
+                TransactionType::TRANSFER->value
+            ));
+        }
     }
 }
