@@ -15,6 +15,16 @@ class User extends Authenticatable
     use HasFactory,SoftDeletes,Notifiable,HasApiTokens;
 
     /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return \Modules\User\Database\Factories\UserFactory::new();
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
