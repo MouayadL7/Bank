@@ -26,12 +26,12 @@ class CreateAccountRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => ['nullable', 'integer', 'exists:users,id'],
-            'type' => ['required', 'string', Rule::in(AccountType::values())],
-            'balance' => ['nullable', 'numeric', 'min:0'],
-            'currency' => ['nullable', 'string', 'size:0'],
+            'customer_id'       => ['nullable', 'integer', 'exists:users,id'],
+            'type'              => ['required', 'string', Rule::in(AccountType::values())],
+            'balance'           => ['nullable', 'numeric', 'min:0'],
+            'currency'          => ['nullable', 'string', 'size:0'],
             'parent_account_id' => ['nullable', 'integer', 'exists:accounts,id'],
-            'meta' => ['nullable', 'array'],
+            'meta'              => ['nullable', 'array'],
         ];
     }
 

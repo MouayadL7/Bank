@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Account\Events;
+namespace Modules\Transaction\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -11,11 +11,10 @@ class AccountBalanceUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $account;
+    public $fromAccount;
+    public $toAccount;
     public $amount;
     public $transactionType;
-    public $fromAccountId;
-    public $toAccountId;
 
     /**
      * Create a new event instance.
@@ -27,13 +26,12 @@ class AccountBalanceUpdated
      * @param int|null $toAccountId
      * @return void
      */
-    public function __construct(Account $account, float $amount, string $transactionType, ?int $fromAccountId = null, ?int $toAccountId = null)
+    public function __construct(Account $fromAccount, Account $toAccount, float $amount, string $transactionType)
     {
-        $this->account = $account;
+        $this->fromAccount = $fromAccount;
+        $this->toAccount = $toAccount;
         $this->amount = $amount;
         $this->transactionType = $transactionType;
-        $this->fromAccountId = $fromAccountId;
-        $this->toAccountId = $toAccountId;
     }
 }
 

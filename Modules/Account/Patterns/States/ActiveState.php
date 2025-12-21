@@ -20,7 +20,6 @@ class ActiveState extends BaseAccountState
         if (!in_array($target, [
             AccountState::FROZEN,
             AccountState::SUSPENDED,
-            AccountState::CLOSED,
         ])) {
             throw new DomainException("Invalid transition from active to {$newState}");
         }

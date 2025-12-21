@@ -1,18 +1,18 @@
 <?php
 
-namespace Modules\Account\Http\Requests;
+namespace Modules\Transaction\Http\Requests;
 
 use Illuminate\Support\Facades\Gate;
 use Modules\Core\Http\Requests\BaseFormRequest;
 
-class WithdrawRequest extends BaseFormRequest
+class TransferRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller');
+        return Gate::allows('isTeller') || Gate::allows('isCustomer');
     }
 
     /**

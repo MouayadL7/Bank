@@ -1,29 +1,37 @@
 <?php
 
-namespace App\Modules\Transaction\Controllers;
+namespace Modules\Transaction\Http\Controllers;
 
 use Modules\Core\Http\Controllers\BaseController;
 use Modules\Transaction\Facades\TransactionFacade;
-use Modules\Transaction\Http\Requests\StoreTransactionRequest;
-use Modules\Transaction\Http\Requests\UpdateTransactionRequest;
+use Modules\Transaction\Http\Requests\DepositRequest;
+use Modules\Transaction\Http\Requests\TransferRequest;
+use Modules\Transaction\Http\Requests\WithdrawRequest;
 use Modules\Transaction\Models\Transaction;
 
 class TransactionController extends BaseController
 {
     public function __construct(private TransactionFacade $facade) {}
 
-    public function store(StoreTransactionRequest $request)
+    public function deposit(DepositRequest $request, $uuid)
     {
-        $transaction = $this->facade->createTransaction($request->toDTO());
+        $transaction = $this->facade->deposit($uuid, (float)$request->input('amount'));
+
         return $this->successResponse($transaction);
     }
 
-    public function update(UpdateTransactionRequest $request, int $id)
+    public function withdraw(WithdrawRequest $request, $uuid)
     {
-        $transaction = Transaction::findOrFail($id);
-        $updated = $this->facade->updateTransaction($transaction, $request->toDTO());
+        $transaction = $this->facade->withdraw($uuid, (float)$request->input('amount'));
 
-        return $this->successResponse($updated);
+        return $this->successResponse($transaction);
+    }
+
+    public function transfer(TransferRequest $request, $fromUuid, $toUuid)
+    {
+        $transaction = $this->facade->transfer($fromUuid, $toUuid, (float)$request->input('amount'));
+
+        return $this->successResponse($transaction);
     }
 
     public function approve(int $id)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Account\Actions;
+namespace Modules\Transaction\Actions;
 
 use Modules\Account\Events\AccountBalanceUpdated;
 use Modules\Account\Models\Account;
@@ -26,21 +26,8 @@ class TransferAction
      */
     public function execute(Account $from, Account $to, float $amount)
     {
-        event(new AccountBalanceUpdated(
-            $from,
-            -$amount,
-            'transfer',
-            $from->id,
-            $to->id
-        ));
-
-        event(new AccountBalanceUpdated(
-            $to,
-            $amount,
-            'transfer',
-            $from->id,
-            $to->id
-        ));
+        $this->withdrawAction->execute($from, $amount);
+        $this->depositAction->execute($to, $amount);
     }
 }
 

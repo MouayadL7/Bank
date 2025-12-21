@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Modules\Transaction\Repositories;
+namespace Modules\Transaction\Repositories\Eloquent;
 
-use App\Modules\Transaction\Enums\TransactionStatus;
+use Modules\Transaction\Enums\TransactionStatus;
 use Modules\Transaction\Models\Transaction;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Transaction\Repositories\Interfaces\TransactionRepositoryInterface;
+use Carbon\Carbon;
 
 class TransactionRepository implements TransactionRepositoryInterface
 {

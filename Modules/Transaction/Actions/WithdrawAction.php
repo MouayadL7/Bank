@@ -1,19 +1,19 @@
 <?php
-namespace Modules\Account\Actions;
+
+namespace Modules\Transaction\Actions;
 
 use Modules\Account\Factories\AccountComponentFactory;
 use Modules\Account\Models\Account;
 
-class DepositAction
+class WithdrawAction
 {
     public function execute(Account $account, float $amount): Account
     {
         $component = AccountComponentFactory::make($account);
-        $component->deposit($amount);
+        $component->withdraw($amount);
 
         return $account;
     }
 }
-
 
 

@@ -4,6 +4,8 @@ namespace Modules\Transaction\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Modules\Transaction\Models\Transaction;
+use Modules\Transaction\Policies\TransactionPolicy;
 
 class TransactionAuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,7 @@ class TransactionAuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'Modules\Transaction\Models\Transaction' => 'Modules\Transaction\Policies\TransactionPolicy',
+        Transaction::class => TransactionPolicy::class,
     ];
 
     /**
