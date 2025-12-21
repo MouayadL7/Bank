@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('support_tickets', function (Blueprint $table) {
             $table->id();
 
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     public function down()

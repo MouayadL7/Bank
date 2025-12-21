@@ -2,7 +2,7 @@
 
 namespace Modules\Transaction\Enums;
 
-enum TransactionStatus: string
+enum TransactionStatusEnum: string
 {
     case PENDING  = 'pending';
     case APPROVED = 'approved';

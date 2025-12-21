@@ -10,6 +10,7 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('accounts', function (Blueprint $table) {
             // 1. PRIMARY & IDENTIFICATION
             $table->id();
@@ -40,6 +41,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
             $table->foreign('parent_account_id')->references('id')->on('accounts')->onDelete('cascade');
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     public function down()
