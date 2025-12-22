@@ -12,10 +12,12 @@ class LogAccountStateChange
 
     public function handle(AccountStateChanged $event): void
     {
+        dd('deposit');
         $this->repository->storeAuditLog([
             'event' => 'account.state.changed',
             'subject_type' => Account::class,
             'subject_id' => $event->account->id,
+            'causer_id' => auth()->id(),
             'description' => sprintf('Account state changed to %s', $event->newState),
             'metadata' => [
                 'account_id' => $event->account->id,
