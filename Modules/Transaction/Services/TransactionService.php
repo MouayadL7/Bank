@@ -85,7 +85,7 @@ class TransactionService
 
     public function withdraw(string $uuid, float $amount, ?int $byUserId = null)
     {
-        DB::transaction(function() use ($uuid, $amount, $byUserId) {
+        return DB::transaction(function() use ($uuid, $amount, $byUserId) {
             $account = $this->accountRepository->findByUuid($uuid);
 
             $this->authorize('withdraw', $account);
@@ -116,12 +116,14 @@ class TransactionService
                     transactionType: TransactionTypeEnum::WITHDRAWAL->value
                 ));
             }
+
+            return new TransactionResource($transaction);
         });
     }
 
     public function transfare(string $fromUUID, string $toUUID, float $amount)
-    {
-        DB::transaction(function () use ($fromUUID, $toUUID, $amount) {
+    {   
+        return DB::transaction(function () use ($fromUUID, $toUUID, $amount) {
             $fromAccount = $this->accountRepository->findByUuid($fromUUID);
             $toAccount = $this->accountRepository->findByUuid($toUUID);
 
@@ -154,6 +156,8 @@ class TransactionService
                     TransactionTypeEnum::TRANSFER->value
                 ));
             }
+
+            return new TransactionResource($transaction);
         });
     }
 

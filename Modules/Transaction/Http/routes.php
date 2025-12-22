@@ -14,10 +14,9 @@ use Modules\Transaction\Http\Controllers\TransactionController;
 |
 */
 
-// transaction-like endpoints
-Route::prefix('accounts/{uuid}/transactions')->group(function () {
-    Route::post('deposit', [TransactionController::class, 'deposit']);
-    Route::post('withdraw', [TransactionController::class, 'withdraw']);
-    // Route::post('transfer', [TransactionController::class, 'transfer']);
+Route::prefix('accounts')->group(function () {
+    Route::post('/{uuid}/transactions/deposit', [TransactionController::class, 'deposit']);
+    Route::post('/{uuid}/transactions/withdraw', [TransactionController::class, 'withdraw']);
+    Route::post('/{fromUuid}/transactions/transfer/{toUuid}', [TransactionController::class, 'transfer']);
 });
 

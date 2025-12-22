@@ -34,7 +34,7 @@ class TransactionController extends BaseController
         return $this->successResponse($transaction);
     }
 
-    public function approve(int $id)
+    public function approve(string )
     {
         $transaction = Transaction::findOrFail($id);
         $approved = $this->facade->approve($transaction);

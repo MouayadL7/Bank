@@ -25,7 +25,7 @@ class TransactionFacade
 
     public function transfer(string $fromUuid, string $toUuid, float $amount)
     {
-        $this->service->transfare($fromUuid, $toUuid, $amount);
+        return $this->service->transfare($fromUuid, $toUuid, $amount);
     }
 
     public function processScheduled()
