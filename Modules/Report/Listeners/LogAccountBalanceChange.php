@@ -16,6 +16,7 @@ class LogAccountBalanceChange
             'event' => 'account.balance.updated',
             'subject_type' => Account::class,
             'subject_id' => $event->fromAccount->id,
+            'causer_id' => auth()->id(),
             'description' => sprintf(
                 'Balance %s by %s',
                 $event->transactionType,

@@ -183,7 +183,7 @@ class TransactionService
 
         foreach ($transactions as $transaction) {
             $this->dispatchTransactionEvent($transaction);
-            $this->repository->markAsApproved($transaction);
+          //  $this->repository->markAsApproved($transaction);
         }
     }
 
