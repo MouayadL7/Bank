@@ -2,10 +2,10 @@
 namespace Modules\Transaction\Handlers;
 
 use Illuminate\Support\Facades\Auth;
-use Modules\Transaction\Enums\TransactionStatus;
+use Modules\Transaction\Enums\TransactionStatusEnum;
 use Modules\Transaction\Models\Transaction;
 
-class AutoApproveHandler extends BaseTransactionHandler
+class AutoApprovalHandler extends BaseTransactionHandler
 {
     public function __construct()
     {
@@ -15,7 +15,7 @@ class AutoApproveHandler extends BaseTransactionHandler
     public function handle(Transaction $transaction): bool
     {
         if ($transaction->amount <= 1000) {
-            $transaction->status = TransactionStatus::APPROVED->value;
+            $transaction->status = TransactionStatusEnum::APPROVED->value;
             $transaction->approved_by = Auth::id();
             $transaction->approved_at = now();
             $transaction->save();

@@ -15,7 +15,7 @@ class CreateAccountRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('isTeller') || Gate::allows('isCustomer');
+        return Gate::allows('isTeller');
     }
 
     /**
@@ -26,12 +26,16 @@ class CreateAccountRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'customer_id'       => ['nullable', 'integer', 'exists:users,id'],
+            // User Data
+            'name'  => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+
+            // Account Data
             'type'              => ['required', 'string', Rule::in(AccountType::values())],
-            'balance'           => ['nullable', 'numeric', 'min:0'],
-            'currency'          => ['nullable', 'string', 'size:0'],
+            'balance'           => ['required', 'numeric', 'min:0'],
+            'currency'          => ['required', 'string', 'size:3'],
             'parent_account_id' => ['nullable', 'integer', 'exists:accounts,id'],
-            'meta'              => ['nullable', 'array'],
+            'meta'              => ['required', 'array'],
         ];
     }
 

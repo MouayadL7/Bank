@@ -2,14 +2,14 @@
 
 namespace Modules\Transaction\Models;
 
-use Modules\Transaction\Enums\TransactionStatus;
-use Modules\Transaction\Enums\TransactionType;
+use Modules\Transaction\Enums\TransactionStatusEnum;
+use Modules\Transaction\Enums\TransactionTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Account\Models\Account;
-use App\Models\User;
+use Modules\User\Models\User;
 
 class Transaction extends Model
 {
@@ -19,15 +19,15 @@ class Transaction extends Model
 
     protected $casts = [
         'amount'        => 'decimal:4',
-        'type'          => TransactionType::class,
-        'status'        => TransactionStatus::class,
+        'type'          => TransactionTypeEnum::class,
+        'status'        => TransactionStatusEnum::class,
         'is_scheduled'  => 'boolean',
         'scheduled_at'  => 'datetime',
     ];
 
     public function isApproved(): bool
     {
-        return $this->status === TransactionStatus::APPROVED;
+        return $this->status === TransactionStatusEnum::APPROVED;
     }
 
     public function approve(int $approvedBy)

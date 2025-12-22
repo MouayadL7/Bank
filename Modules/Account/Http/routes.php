@@ -14,7 +14,7 @@ use Modules\Account\Http\Controllers\AccountController;
 |
 */
 
-Route::prefix('api/accounts')->group(function () {
+Route::prefix('accounts')->group(function () {
 
     // create & show
     Route::get('/', [AccountController::class, 'index']);

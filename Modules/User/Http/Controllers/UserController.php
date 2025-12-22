@@ -15,14 +15,14 @@ class UserController extends BaseController
     {
         $users = $this->userService->list($request->validated());
 
-        return $this->successResponse($users);
+        return $this->paginatedResponse($users);
     }
 
     public function search(UserSearchRequest $request)
     {
         $users = $this->userService->search($request->validated());
 
-        return $this->successResponse($users);
+        return $this->paginatedResponse($users);
     }
 
     public function show(string $uuid)

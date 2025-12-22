@@ -2,9 +2,14 @@
 
 namespace Modules\User\DTOs;
 
+use Illuminate\Support\Facades\Hash;
+use Modules\AccessControl\Models\Role;
+use Modules\User\Enums\UserStatus;
+
 class UserData
 {
     public function __construct(
+        public string $uuid,
         public string $name,
         public string $email,
         public string $password,
@@ -21,11 +26,12 @@ class UserData
     public static function fromArray(array $data): self
     {
         return new self(
+            uuid: \Illuminate\Support\Str::uuid()->toString(),
             name: $data['name'],
             email: $data['email'],
-            password: $data['password'],
-            roleId: $data['role_id'],
-            status: $data['status'],
+            password: '12345678', //generateStrongPassword(),
+            roleId: $data['role_id'] ?? Role::ROLE_CUSTOMER,
+            status: $data['status'] ?? UserStatus::ACTIVE->value,
         );
     }
 
@@ -37,10 +43,10 @@ class UserData
     public function toArray(): array
     {
         return [
-            'uuid'     => \Illuminate\Support\Str::uuid()->toString(),
+            'uuid'     => $this->uuid,
             'name'     => $this->name,
             'email'    => $this->email,
-            'password' => $this->password,
+            'password' => Hash::make($this->password),
             'role_id'  => $this->roleId,
             'status'   => $this->status,
         ];
