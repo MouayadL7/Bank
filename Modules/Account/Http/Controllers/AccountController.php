@@ -8,6 +8,9 @@ use Modules\Core\Http\Controllers\BaseController;
 use Modules\Account\Http\Requests\CreateAccountRequest;
 use Modules\Account\Http\Requests\UpdateAccountMetaRequest;
 use Modules\Account\Services\AccountService;
+use Modules\Account\Models\Account;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends BaseController
 {
@@ -18,7 +21,13 @@ class AccountController extends BaseController
      */
     public function index()
     {
-        $accounts = $this->service->getAll();
+        // Customers should only see their own accounts
+        if (Auth::check() && Gate::allows('isCustomer')) {
+            $accounts = $this->service->getMyAccounts();
+        } else {
+            // Tellers, managers, and admins can see all accounts
+            $accounts = $this->service->getAll();
+        }
 
         return $this->successResponse($accounts);
     }
@@ -35,9 +44,16 @@ class AccountController extends BaseController
 
     public function show(string $uuid)
     {
-        $account = $this->service->getByUuid($uuid);
+        // Get the account model first for authorization
+        $account = Account::where('uuid', $uuid)->firstOrFail();
 
-        return $this->successResponse($account);
+        // Authorize: customers can only view their own accounts
+        $this->authorize('view', $account);
+
+        // Get the resource after authorization
+        $accountResource = $this->service->getByUuid($uuid);
+
+        return $this->successResponse($accountResource);
     }
 
     public function getMyAccounts()

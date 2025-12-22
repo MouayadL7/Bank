@@ -13,7 +13,7 @@ class AccountAuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'Modules\Account\Models\Account' => 'Modules\Account\Policies\AccountPolicy',
+        'Modules\Account\Models\Account' => 'Modules\Account\Policies\AccountPolicy',
     ];
 
     /**
