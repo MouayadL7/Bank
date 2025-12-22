@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Mockery;
@@ -13,7 +12,6 @@ use Tests\TestCase;
 
 class AuthenticatorActionTest extends TestCase
 {
-    use RefreshDatabase;
 
     protected function tearDown(): void
     {
@@ -70,7 +68,8 @@ class AuthenticatorActionTest extends TestCase
 
         // Assert
         $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('Invalid credentials.');
+        // The actual message is "The provided credentials are incorrect."
+        $this->expectExceptionMessage('The provided credentials are incorrect.');
 
         // Act
         $authenticator->attempt($email, $wrongPassword);
