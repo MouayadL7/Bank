@@ -77,7 +77,13 @@ class TransactionServiceTest extends TestCase
                 return $callback();
             });
 
-        $this->actingAs(Mockery::mock(\Modules\User\Models\User::class));
+        $user = Mockery::mock(\Modules\User\Models\User::class)->makePartial();
+        $user->shouldAllowMockingProtectedMethods();
+        $user->shouldReceive('getAttribute')
+            ->with('role_id')
+            ->andReturn(1);
+        $user->role_id = 1;
+        $this->actingAs($user);
 
         $service = new TransactionService(
             $transactionRepo,
@@ -145,7 +151,13 @@ class TransactionServiceTest extends TestCase
                 return $callback();
             });
 
-        $this->actingAs(Mockery::mock(\Modules\User\Models\User::class));
+        $user = Mockery::mock(\Modules\User\Models\User::class)->makePartial();
+        $user->shouldAllowMockingProtectedMethods();
+        $user->shouldReceive('getAttribute')
+            ->with('role_id')
+            ->andReturn(1);
+        $user->role_id = 1;
+        $this->actingAs($user);
 
         $service = new TransactionService(
             $transactionRepo,
@@ -215,7 +227,13 @@ class TransactionServiceTest extends TestCase
                 return $callback();
             });
 
-        $this->actingAs(Mockery::mock(\Modules\User\Models\User::class));
+        $user = Mockery::mock(\Modules\User\Models\User::class)->makePartial();
+        $user->shouldAllowMockingProtectedMethods();
+        $user->shouldReceive('getAttribute')
+            ->with('role_id')
+            ->andReturn(1);
+        $user->role_id = 1;
+        $this->actingAs($user);
 
         $service = new TransactionService(
             $transactionRepo,

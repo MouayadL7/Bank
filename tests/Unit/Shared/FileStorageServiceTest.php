@@ -3,6 +3,7 @@
 namespace Tests\Unit\Shared;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Modules\Shared\Exceptions\FileNotFoundException;
@@ -147,32 +148,36 @@ class FileStorageServiceTest extends TestCase
         // Arrange
         $path = 'documents/test.pdf';
         $disk = 'public';
-        $fullPath = storage_path('app/public/documents/test.pdf');
+        
+        // Create a temporary file for testing
+        $tempDir = sys_get_temp_dir();
+        $tempFile = $tempDir . DIRECTORY_SEPARATOR . 'test_download_' . uniqid() . '.pdf';
+        file_put_contents($tempFile, 'test content');
 
         $storageDisk = Mockery::mock();
         $storageDisk->shouldReceive('path')
             ->once()
             ->with($path)
-            ->andReturn($fullPath);
+            ->andReturn($tempFile);
 
         Storage::shouldReceive('disk')
+            ->once()
             ->with($disk)
             ->andReturn($storageDisk);
 
-        // Create a temporary file for testing
-        $tempDir = sys_get_temp_dir();
-        $tempFile = $tempDir . '/test_download.pdf';
-        file_put_contents($tempFile, 'test content');
-
-        // Mock storage path to return temp file
-        $storageDisk->shouldReceive('path')
-            ->andReturn($tempFile);
+        // Mock Response facade
+        Response::shouldReceive('download')
+            ->once()
+            ->with($tempFile)
+            ->andReturn(Mockery::mock(\Symfony\Component\HttpFoundation\BinaryFileResponse::class));
 
         $service = new FileStorageService();
 
-        // Act - This will fail if file doesn't exist, so we skip the actual download test
-        // Just verify the service can be instantiated
-        $this->assertInstanceOf(FileStorageService::class, $service);
+        // Act
+        $result = $service->download($path, $disk);
+
+        // Assert
+        $this->assertNotNull($result);
 
         // Cleanup
         if (file_exists($tempFile)) {

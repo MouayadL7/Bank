@@ -3,7 +3,7 @@
 namespace Tests\Unit\Notification;
 
 use Mockery;
-use Modules\Customer\Notifications\Services\NotificationService;
+use Modules\Notification\Services\NotificationService;
 use Modules\Notification\Interfaces\NotifiableEvent;
 use Modules\Notification\Interfaces\NotificationObserver;
 use Tests\TestCase;

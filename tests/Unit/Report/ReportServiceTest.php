@@ -59,10 +59,9 @@ class ReportServiceTest extends TestCase
         $account = Mockery::mock(\Modules\Account\Models\Account::class)->makePartial();
         $account->shouldAllowMockingProtectedMethods();
         $account->uuid = 'test-uuid';
-        $account->type = Mockery::mock(\Modules\Account\Enums\AccountType::class);
-        $account->type->value = 'savings';
-        $account->state = Mockery::mock(\Modules\Account\Enums\AccountState::class);
-        $account->state->value = 'active';
+        // Use actual enum instances instead of mocking (enums are final and can't be mocked)
+        $account->type = \Modules\Account\Enums\AccountType::SAVINGS;
+        $account->state = \Modules\Account\Enums\AccountState::ACTIVE;
         $account->balance = 1000.00;
         $account->currency = 'USD';
         $account->opened_at = Carbon::now();

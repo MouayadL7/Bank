@@ -23,7 +23,7 @@ class RoleServiceTest extends TestCase
     public function test_get_all_returns_role_resource_collection(): void
     {
         // Arrange
-        $collection = collect([]);
+        $collection = new \Illuminate\Database\Eloquent\Collection([]);
 
         $repo = Mockery::mock(RoleRepositoryInterface::class);
         $repo->shouldReceive('all')

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Customer\Notifications\Services;
+namespace Modules\Notification\Services;
 
 use Modules\Notification\Interfaces\NotifiableEvent;
 use Modules\Notification\Interfaces\NotificationObserver;
