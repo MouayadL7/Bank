@@ -47,4 +47,9 @@ class TransactionFacade
     {
         return $this->service->getPending();
     }
+
+    public function getAccountTransactions(string $uuid)
+    {
+        return $this->service->getAccountTransactions($uuid);
+    }
 }

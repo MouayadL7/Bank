@@ -37,6 +37,14 @@ class TransactionService
         return TransactionResource::collection($transactions);
     }
 
+    public function getAccountTransactions(string $uuid)
+    {
+        $account = $this->accountRepository->findByUuid($uuid);
+        $transactions = $this->repository->getByAccountId($account->id);
+
+        return TransactionResource::collection($transactions);
+    }
+
     private function createTransaction(int $from, int $to, $amount, string $type, bool $isScheduled = false, ?Carbon $scheduledAt = null)
     {
         return $transaction = $this->repository->create([

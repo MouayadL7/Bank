@@ -16,4 +16,6 @@ interface TransactionRepositoryInterface
     public function findByUuid(string $uuid): Transaction;
     
     public function getPending(): Collection;
+
+    public function getByAccountId(int $accountId): Collection;
 }

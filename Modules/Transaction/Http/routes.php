@@ -15,6 +15,7 @@ use Modules\Transaction\Http\Controllers\TransactionController;
 */
 
 Route::prefix('accounts')->group(function () {
+    Route::get('/{uuid}/transactions', [TransactionController::class, 'getAccountTransactions']);
     Route::post('/{uuid}/transactions/deposit', [TransactionController::class, 'deposit']);
     Route::post('/{uuid}/transactions/withdraw', [TransactionController::class, 'withdraw']);
     Route::post('/{fromUuid}/transactions/transfer/{toUuid}', [TransactionController::class, 'transfer']);

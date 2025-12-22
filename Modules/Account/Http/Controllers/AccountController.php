@@ -40,6 +40,13 @@ class AccountController extends BaseController
         return $this->successResponse($account);
     }
 
+    public function getMyAccounts()
+    {
+        $accounts = $this->service->getMyAccounts();
+
+        return $this->successResponse($accounts);
+    }
+
     public function changeState(ChangeAccountStateRequest $request, string $uuid)
     {
         $account = $this->service->changeState(

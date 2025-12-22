@@ -20,6 +20,13 @@ class TransactionController extends BaseController
         return $this->successResponse($transactions);
     }
 
+    public function getAccountTransactions(string $uuid)
+    {
+        $transactions = $this->facade->getAccountTransactions($uuid);
+
+        return $this->successResponse($transactions);
+    }
+
     public function deposit(DepositRequest $request, $uuid)
     {
         $transaction = $this->facade->deposit($uuid, (float)$request->input('amount'));

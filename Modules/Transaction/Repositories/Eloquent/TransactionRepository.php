@@ -38,4 +38,12 @@ class TransactionRepository implements TransactionRepositoryInterface
     {
         return Transaction::Where('status', TransactionStatusEnum::PENDING->value)->get();
     }
+
+    public function getByAccountId(int $accountId): Collection
+    {
+        return Transaction::where(function ($query) use ($accountId) {
+            $query->where('from_account_id', $accountId)
+                  ->orWhere('to_account_id', $accountId);
+        })->orderBy('created_at', 'desc')->get();
+    }
 }

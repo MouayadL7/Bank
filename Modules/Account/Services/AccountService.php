@@ -37,6 +37,13 @@ class AccountService
         return new AccountResource($account);
     }
 
+    public function getMyAccounts()
+    {
+        $accounts = $this->repo->findByCustomerId(auth()->id());
+
+        return AccountResource::collection($accounts);
+    }
+
     public function createAccount(AccountData $dto): AccountResource
     {
         return DB::transaction(function () use ($dto) {

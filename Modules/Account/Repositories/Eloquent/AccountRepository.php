@@ -25,6 +25,13 @@ class AccountRepository implements AccountRepositoryInterface
             ->firstOrFail();
     }
 
+    public function findByCustomerId(int $customerId): LengthAwarePaginator
+    {
+        return Account::where('customer_id', $customerId)
+            ->with(['customer', 'parent', 'children'])
+            ->paginate();
+    }
+
     public function save(Account $model): Account
     {
         $model->save();
