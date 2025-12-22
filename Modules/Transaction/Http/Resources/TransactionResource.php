@@ -15,9 +15,10 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'uuid'            => $this->uuid,
             'from_account_id' => $this->from_account_id,
             'to_account_id'   => $this->to_account_id,
-            'balance'          => $this->amount,
+            'balance'         => $this->amount,
             'type'            => $this->type,
             'status'          => $this->status,
             'created_at'      => $this->created_at,

@@ -23,6 +23,7 @@ class Transaction extends Model
         'status'        => TransactionStatusEnum::class,
         'is_scheduled'  => 'boolean',
         'scheduled_at'  => 'datetime',
+        'approved_at'   => 'datetime',
     ];
 
     public function isApproved(): bool
@@ -30,10 +31,22 @@ class Transaction extends Model
         return $this->status === TransactionStatusEnum::APPROVED;
     }
 
+    public function isRejected(): bool
+    {
+        return $this->status === TransactionStatusEnum::REJECTED;
+    }
+
     public function approve(int $approvedBy)
     {
+        $this->status = TransactionStatusEnum::APPROVED->value;
         $this->approved_by = $approvedBy;
         $this->approved_at = now();
+        $this->save();
+    }
+
+    public function reject(int $rejectedBy)
+    {
+        $this->status = TransactionStatusEnum::REJECTED->value;
         $this->save();
     }
 

@@ -33,8 +33,18 @@ class TransactionFacade
         return $this->service->processScheduledTransactions();
     }
 
-    public function approve(Transaction $transaction)
+    public function approve(string $uuid)
     {
-        return $this->service->approveTransaction($transaction);
+        return $this->service->approveTransaction($uuid);
+    }
+
+    public function reject(string $uuid)
+    {
+        return $this->service->rejectTransaction($uuid);
+    }
+
+    public function getPending()
+    {
+        return $this->service->getPending();
     }
 }

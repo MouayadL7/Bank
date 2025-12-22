@@ -2,7 +2,7 @@
 
 namespace Modules\Transaction\Repositories\Eloquent;
 
-use Modules\Transaction\Enums\TransactionStatus;
+use Modules\Transaction\Enums\TransactionStatusEnum;
 use Modules\Transaction\Models\Transaction;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\Transaction\Repositories\Interfaces\TransactionRepositoryInterface;
@@ -25,13 +25,23 @@ class TransactionRepository implements TransactionRepositoryInterface
     {
         return Transaction::where('is_scheduled', true)
             ->where('scheduled_at', '<=', Carbon::now())
-            ->where('status', TransactionStatus::PENDING)
+            ->where('status', TransactionStatusEnum::PENDING)
             ->get();
     }
 
     public function markAsApproved(Transaction $transaction): void
     {
-        $transaction->status = TransactionStatus::APPROVED;
+        $transaction->status = TransactionStatusEnum::APPROVED;
         $transaction->save();
+    }
+
+    public function findByUuid(string $uuid): Transaction
+    {
+        return Transaction::where('uuid', $uuid)->firstOrFail();
+    }
+
+    public function getPending(): Collection
+    {
+        return Transaction::Where('status', TransactionStatusEnum::PENDING->value)->get();
     }
 }

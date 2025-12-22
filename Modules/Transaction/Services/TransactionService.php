@@ -30,9 +30,17 @@ class TransactionService
         private AutoApprovalHandler $autoApproveHandler
     ) {}
 
+    public function getPending()
+    {
+        $transactions = $this->repository->getPending();
+
+        return TransactionResource::collection($transactions);
+    }
+
     private function createTransaction(int $from, int $to, $amount, string $type, bool $isScheduled = false, ?Carbon $scheduledAt = null)
     {
         return $transaction = $this->repository->create([
+            'uuid' => \Illuminate\Support\Str::uuid()->toString(),
             'from_account_id' => $from,
             'to_account_id' => $to,
             'amount' => $amount,
@@ -122,7 +130,7 @@ class TransactionService
     }
 
     public function transfare(string $fromUUID, string $toUUID, float $amount)
-    {   
+    {
         return DB::transaction(function () use ($fromUUID, $toUUID, $amount) {
             $fromAccount = $this->accountRepository->findByUuid($fromUUID);
             $toAccount = $this->accountRepository->findByUuid($toUUID);
@@ -199,65 +207,88 @@ class TransactionService
         };
     }
 
-    public function approveTransaction(Transaction $transaction)
+    public function approveTransaction(string $uuid)
     {
-        // Check if transaction already been Approved
-        if ($transaction->isApproved()) {
-            throw new \Exception('Transaction has already been approved.');
-        }
+        return DB::transaction(function () use ($uuid) {
+            $transaction = $this->repository->findByUuid($uuid);
 
-        $fromAccount = $transaction->fromAccount;
-        $toAccount = $transaction->toAccount;
-        $amount = $transaction->amount;
+            // Check if transaction already been Approved
+            if ($transaction->isApproved()) {
+                throw new \Exception('Transaction has already been approved.');
+            }
 
-        // Approve Transaction
-        $transaction->approve(Auth::id());
+            $fromAccount = $transaction->fromAccount;
+            $toAccount = $transaction->toAccount;
+            $amount = $transaction->amount;
 
-        if ($transaction->type === TransactionTypeEnum::DEPOSIT) {
-            // apply domain rules
-            $updatedAccount = $this->depositAction->execute($fromAccount, $amount);
+            // Approve Transaction
+            $transaction->approve(Auth::id());
 
-            // persist changes
-            $this->accountRepository->save($updatedAccount);
+            if ($transaction->type === TransactionTypeEnum::DEPOSIT) {
+                // apply domain rules
+                $updatedAccount = $this->depositAction->execute($fromAccount, $amount);
 
-            // events are not responsibility of this method
-            event(new AccountBalanceUpdated(
-                fromAccount: $fromAccount,
-                toAccount: $toAccount,
-                amount: $amount,
-                transactionType: TransactionTypeEnum::DEPOSIT->value
-            ));
-        }
-        else if ($transaction->type === TransactionTypeEnum::WITHDRAWAL) {
-            // apply domain rules
-            $updatedAccount = $this->withdrawAction->execute($fromAccount, $amount);
+                // persist changes
+                $this->accountRepository->save($updatedAccount);
 
-            // persist changes
-            $this->accountRepository->save($updatedAccount);
+                // events are not responsibility of this method
+                event(new AccountBalanceUpdated(
+                    fromAccount: $fromAccount,
+                    toAccount: $toAccount,
+                    amount: $amount,
+                    transactionType: TransactionTypeEnum::DEPOSIT->value
+                ));
+            }
+            else if ($transaction->type === TransactionTypeEnum::WITHDRAWAL) {
+                // apply domain rules
+                $updatedAccount = $this->withdrawAction->execute($fromAccount, $amount);
 
-            // events are not responsibility of this method
-            event(new AccountBalanceUpdated(
-                fromAccount: $fromAccount,
-                toAccount: $toAccount,
-                amount: $amount,
-                transactionType: TransactionTypeEnum::WITHDRAWAL->value
-            ));
-        }
-        else {
-            // apply domain rules
-            $this->transferAction->execute($fromAccount, $toAccount, $amount);
+                // persist changes
+                $this->accountRepository->save($updatedAccount);
 
-            // persist changes
-            $this->accountRepository->save($fromAccount);
-            $this->accountRepository->save($toAccount);
+                // events are not responsibility of this method
+                event(new AccountBalanceUpdated(
+                    fromAccount: $fromAccount,
+                    toAccount: $toAccount,
+                    amount: $amount,
+                    transactionType: TransactionTypeEnum::WITHDRAWAL->value
+                ));
+            }
+            else {
+                // apply domain rules
+                $this->transferAction->execute($fromAccount, $toAccount, $amount);
 
-            // events are not responsibility of this method
-            event(new AccountBalanceUpdated(
-                $fromAccount,
-                $toAccount,
-                $amount,
-                TransactionTypeEnum::TRANSFER->value
-            ));
-        }
+                // persist changes
+                $this->accountRepository->save($fromAccount);
+                $this->accountRepository->save($toAccount);
+
+                // events are not responsibility of this method
+                event(new AccountBalanceUpdated(
+                    $fromAccount,
+                    $toAccount,
+                    $amount,
+                    TransactionTypeEnum::TRANSFER->value
+                ));
+            }
+
+            return new TransactionResource($transaction);
+        });
+    }
+
+    public function rejectTransaction(string $uuid)
+    {
+        return DB::transaction(function () use ($uuid) {
+            $transaction = $this->repository->findByUuid($uuid);
+
+            // Check if transaction already been Rejected
+            if ($transaction->isRejected()) {
+                throw new \Exception('Transaction has already been rejected.');
+            }
+
+            // Reject Transaction
+            $transaction->reject(Auth::id());
+
+            return new TransactionResource($transaction);
+        });
     }
 }

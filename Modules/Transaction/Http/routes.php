@@ -20,3 +20,9 @@ Route::prefix('accounts')->group(function () {
     Route::post('/{fromUuid}/transactions/transfer/{toUuid}', [TransactionController::class, 'transfer']);
 });
 
+Route::middleware(['auth:api', 'can:isManager'])->prefix('transactions')->group(function() {
+    Route::get('pending', [TransactionController::class, 'getPending']);
+    Route::post('{uuid}/approve', [TransactionController::class, 'approve']);
+    Route::post('{uuid}/reject', [TransactionController::class, 'reject']);
+});
+

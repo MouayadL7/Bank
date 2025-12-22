@@ -13,6 +13,7 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
 
             $table->foreignId('from_account_id')->nullable()->constrained('accounts')->onDelete('set null');
             $table->foreignId('to_account_id')->nullable()->constrained('accounts')->onDelete('set null');

@@ -13,6 +13,13 @@ class TransactionController extends BaseController
 {
     public function __construct(private TransactionFacade $facade) {}
 
+    public function getPending()
+    {
+        $transactions = $this->facade->getPending();
+
+        return $this->successResponse($transactions);
+    }
+
     public function deposit(DepositRequest $request, $uuid)
     {
         $transaction = $this->facade->deposit($uuid, (float)$request->input('amount'));
@@ -34,16 +41,18 @@ class TransactionController extends BaseController
         return $this->successResponse($transaction);
     }
 
-    public function approve(string )
+    public function approve(string $uuid)
     {
-        $transaction = Transaction::findOrFail($id);
-        $approved = $this->facade->approve($transaction);
+        $transaction = $this->facade->approve($uuid);
 
-        if ($approved) {
-            return $this->successResponse($transaction, 'Transaction approved successfully.');
-        }
+        return $this->successResponse($transaction);
+    }
 
-        return $this->errorResponse('Transaction could not be approved.');
+    public function reject(string $uuid)
+    {
+        $transaction = $this->facade->reject($uuid);
+
+        return $this->successResponse($transaction);
     }
 
     public function processScheduled()
