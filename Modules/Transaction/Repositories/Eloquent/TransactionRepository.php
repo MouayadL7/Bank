@@ -29,12 +29,6 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->get();
     }
 
-    public function markAsApproved(Transaction $transaction): void
-    {
-        $transaction->status = TransactionStatusEnum::APPROVED;
-        $transaction->save();
-    }
-
     public function findByUuid(string $uuid): Transaction
     {
         return Transaction::where('uuid', $uuid)->firstOrFail();

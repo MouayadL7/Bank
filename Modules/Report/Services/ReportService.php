@@ -2,8 +2,8 @@
 
 namespace Modules\Report\Services;
 
-use App\Modules\Transaction\Enums\TransactionStatus;
-use App\Modules\Transaction\Enums\TransactionType;
+use Modules\Transaction\Enums\TransactionStatusEnum;
+use Modules\Transaction\Enums\TransactionTypeEnum;
 use Carbon\Carbon;
 use Modules\Account\Enums\AccountState;
 use Modules\Account\Enums\AccountType;
@@ -21,13 +21,13 @@ class ReportService
 
         $totalAmount = $transactions->sum(fn ($tx) => (float) $tx->amount);
 
-        $byType = $transactions->groupBy(fn ($tx) => $tx->type instanceof TransactionType ? $tx->type->value : (string) $tx->type)
+        $byType = $transactions->groupBy(fn ($tx) => $tx->type instanceof TransactionTypeEnum ? $tx->type->value : (string) $tx->type)
             ->map(fn ($items) => [
                 'count' => $items->count(),
                 'amount' => $items->sum(fn ($tx) => (float) $tx->amount),
             ])->toArray();
 
-        $byStatus = $transactions->groupBy(fn ($tx) => $tx->status instanceof TransactionStatus ? $tx->status->value : (string) $tx->status)
+        $byStatus = $transactions->groupBy(fn ($tx) => $tx->status instanceof TransactionStatusEnum ? $tx->status->value : (string) $tx->status)
             ->map(fn ($items) => [
                 'count' => $items->count(),
                 'amount' => $items->sum(fn ($tx) => (float) $tx->amount),

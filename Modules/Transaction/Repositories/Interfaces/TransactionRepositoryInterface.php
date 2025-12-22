@@ -13,8 +13,7 @@ interface TransactionRepositoryInterface
 
     public function getExecutableScheduledTransactions(): Collection;
 
-    public function markAsApproved(Transaction $transaction): void;
-
     public function findByUuid(string $uuid): Transaction;
+    
     public function getPending(): Collection;
 }

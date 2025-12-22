@@ -12,6 +12,7 @@ class AccountResource extends JsonResource
         return [
             'uuid'        => $this->uuid,
             'customer'    => $this->whenLoaded('customer', fn() => new UserResource($this->customer)),
+            'account_number' => $this->account_number,
           //  'parent'      => $this->when($this->parent_account_id, new AccountResource($this->parent)),
 
             'type'        => $this->type->label(),

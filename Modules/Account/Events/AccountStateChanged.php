@@ -11,5 +11,5 @@ class AccountStateChanged
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Account $account, public string $newState) {}
+    public function __construct(public Account $account, public string $newState) {dd('yes');}
 }
