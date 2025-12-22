@@ -3,6 +3,7 @@
 namespace Modules\Auth\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Modules\Auth\Http\Requests\LoginRequest;
 use Modules\Auth\Services\AuthService;
 use Modules\Core\Http\Controllers\BaseController;

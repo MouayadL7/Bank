@@ -4,12 +4,13 @@ namespace Modules\Account\Actions;
 
 use Modules\Account\Models\Account;
 use DomainException;
+use Modules\Account\Enums\AccountState;
 
 class ChangeParentAccountAction
 {
     public function execute(Account $account, ?Account $newParent): void
     {
-        if ($account->state === 'closed') {
+        if ($account->state === AccountState::CLOSED) {
             throw new DomainException('Cannot move a closed account.');
         }
 

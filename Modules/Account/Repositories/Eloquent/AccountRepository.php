@@ -10,7 +10,7 @@ class AccountRepository implements AccountRepositoryInterface
 {
     public function all(): LengthAwarePaginator
     {
-        return Account::with(['parent', 'children'])->paginate();
+        return Account::with(['customer', 'parent', 'children'])->paginate();
     }
 
     public function findById(int $id): Account
@@ -18,9 +18,11 @@ class AccountRepository implements AccountRepositoryInterface
         return Account::findOrFail($id);
     }
 
-    public function findByUuid(string $uuid): Account
+    public function findByUuid(string $uuid, bool $load = false): Account
     {
-        return Account::where('uuid', $uuid)->firstOrFail();
+        return Account::where('uuid', $uuid)
+            ->when($load, fn($q) => $q->with(['customer', 'parent', 'children']))
+            ->firstOrFail();
     }
 
     public function save(Account $model): Account
@@ -29,8 +31,15 @@ class AccountRepository implements AccountRepositoryInterface
         return $model;
     }
 
+    public function load(Account $account): Account
+    {
+        return $account->load(['customer', 'parent', 'children']);
+    }
+
     public function create(array $data): Account
     {
-        return Account::create($data);
+        $account = Account::create($data);
+
+        return $account->load('customer');
     }
 }

@@ -17,9 +17,9 @@ class AuthenticatorAction
     {
         $user = $this->userRepository->findByEmail($email);
 
-        if (!Hash::check($password, $user->password)) {
+        if (!$user || !Hash::check($password, $user->password)) {
             throw ValidationException::withMessages([
-                'password' => 'Invalid credentials.',
+                'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 

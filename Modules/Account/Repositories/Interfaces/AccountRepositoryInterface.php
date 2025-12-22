@@ -11,5 +11,6 @@ interface AccountRepositoryInterface
     public function findById(int $id): Account;
     public function findByUuid(string $uuid): Account;
     public function save(Account $model): Account;
+    public function load(Account $account): Account;
     public function create(array $data): Account;
 }

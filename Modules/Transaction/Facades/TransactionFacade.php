@@ -1,9 +1,8 @@
 <?php
 namespace Modules\Transaction\Facades;
 
-use App\Modules\Transaction\Services\TransactionService;
+use Modules\Transaction\Services\TransactionService;
 use Modules\Transaction\Models\Transaction;
-use Modules\Transaction\DTOs\TransactionDTO;
 
 class TransactionFacade
 {

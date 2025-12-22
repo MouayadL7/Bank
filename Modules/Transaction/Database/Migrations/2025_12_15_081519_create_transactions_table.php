@@ -30,6 +30,8 @@ return new class extends Migration
             $table->boolean('is_scheduled')->default(false);
             $table->timestamp('scheduled_at')->nullable();
 
+            $table->foreignId('created_by')->constrained('users');
+
             $table->timestamps();
             $table->softDeletes();
         });
