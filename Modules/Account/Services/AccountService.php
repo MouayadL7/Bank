@@ -11,6 +11,7 @@ use Modules\Account\Events\AccountClosed;
 use Modules\Account\Events\AccountStateChanged;
 use Modules\Account\Repositories\Interfaces\AccountRepositoryInterface;
 use Modules\Account\Http\Resources\AccountResource;
+use Modules\User\Services\UserService;
 
 class AccountService
 {
@@ -19,6 +20,7 @@ class AccountService
         private CloseAccountAction $closeAccountAction,
         private UpdateAccountMetaAction $updateAccountMetaAction,
         private ChangeParentAccountAction $changeParentAccountAction,
+        private UserService $userService,
     ) {}
 
     public function getAll()
@@ -30,16 +32,29 @@ class AccountService
 
     public function getByUuid(string $uuid): AccountResource
     {
-        $account = $this->repo->findByUuid($uuid);
+        $account = $this->repo->findByUuid($uuid, true);
 
         return new AccountResource($account);
     }
 
+    public function getMyAccounts()
+    {
+        $accounts = $this->repo->findByCustomerId(auth()->id());
+
+        return AccountResource::collection($accounts);
+    }
+
     public function createAccount(AccountData $dto): AccountResource
     {
-        $model = $this->repo->create($dto->toArray());
+        return DB::transaction(function () use ($dto) {
+            $customer = $this->userService->create($dto->userData);
 
-        return new AccountResource($model);
+            $accountData = $dto->toArray();
+            $accountData['customer_id'] = $customer->id;
+            $account = $this->repo->create($accountData);
+
+            return new AccountResource($account);
+        });
     }
 
     public function changeState(string $uuid, string $newState): AccountResource
@@ -51,6 +66,7 @@ class AccountService
             $state->transitionTo($account, $newState);
 
             $this->repo->save($account);
+            $this->repo->load($account);
 
             event(new AccountStateChanged($account, $newState));
 
@@ -67,6 +83,7 @@ class AccountService
             $this->closeAccountAction->execute($account);
 
             $this->repo->save($account);
+            $this->repo->load($account);
 
             event(new AccountClosed($account));
 
@@ -83,6 +100,7 @@ class AccountService
             $this->updateAccountMetaAction->execute($account, $meta);
 
             $this->repo->save($account);
+            $this->repo->load($account);
 
             return new AccountResource($account);
         });
@@ -101,6 +119,7 @@ class AccountService
             $this->changeParentAccountAction->execute($account, $parent);
 
             $this->repo->save($account);
+            $this->repo->load($account);
 
             return new AccountResource($account);
         });

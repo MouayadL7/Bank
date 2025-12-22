@@ -7,6 +7,11 @@ use Modules\User\Models\User;
 
 class UserRepository implements UserRepositoryInterface
 {
+    public function create(array $data): User
+    {
+        return User::create($data);
+    }
+
     public function list(array $filters)
     {
         return User::with('role')
@@ -14,14 +19,16 @@ class UserRepository implements UserRepositoryInterface
             ->paginate($filters['per_page'] ?? 15);
     }
 
-    public function findByUuid(string $uuid): User
+    public function findByUuid(string $uuid, bool $load = false): User
     {
-        return User::where('uuid', $uuid)->firstOrFail();
+        return User::where('uuid', $uuid)
+            ->when($load, fn($q) => $q->with('accounts'))
+            ->firstOrFail();
     }
 
-    public function findByEmail(string $email): User
+    public function findByEmail(string $email): ?User
     {
-        return User::where('email', $email)->firstOrFail();
+        return User::where('email', $email)->first();
     }
 
     public function save(User $user): User

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('account_number', 20)->unique();
 
             // 2. RELATIONSHIPS
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('parent_account_id')->nullable();
 
             // 3. ACCOUNT TYPE & STATE
@@ -37,8 +37,8 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict');
+            $table->index('customer_id');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('restrict');
             $table->foreign('parent_account_id')->references('id')->on('accounts')->onDelete('cascade');
         });
         Schema::enableForeignKeyConstraints();

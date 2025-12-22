@@ -116,8 +116,15 @@ class AccountController extends BaseController
 
         return $this->successResponse($account);
     }
+  
+    public function getMyAccounts()
+    {
+        $accounts = $this->service->getMyAccounts();
 
-    #[OA\Post(
+        return $this->successResponse($accounts);
+    }
+
+  #[OA\Post(
         path: '/accounts/{uuid}/state',
         summary: 'Change account state',
         description: 'Update the state of an account (active, frozen, suspended, closed)',

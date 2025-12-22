@@ -33,7 +33,7 @@ class UserListRequest extends BaseFormRequest
     {
         return [
             'role' => [
-                'nullable',
+                'required',
                 'string',
                 Rule::exists('roles', 'name'),
             ],

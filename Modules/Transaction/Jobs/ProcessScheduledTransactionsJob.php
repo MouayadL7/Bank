@@ -2,7 +2,7 @@
 
 namespace App\Modules\Transaction\Jobs;
 
-use App\Modules\Transaction\Services\TransactionService;
+use Modules\Transaction\Services\TransactionService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;

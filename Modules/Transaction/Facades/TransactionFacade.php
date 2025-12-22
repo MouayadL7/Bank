@@ -1,9 +1,8 @@
 <?php
 namespace Modules\Transaction\Facades;
 
-use App\Modules\Transaction\Services\TransactionService;
+use Modules\Transaction\Services\TransactionService;
 use Modules\Transaction\Models\Transaction;
-use Modules\Transaction\DTOs\TransactionDTO;
 
 class TransactionFacade
 {
@@ -26,7 +25,7 @@ class TransactionFacade
 
     public function transfer(string $fromUuid, string $toUuid, float $amount)
     {
-        $this->service->transfare($fromUuid, $toUuid, $amount);
+        return $this->service->transfare($fromUuid, $toUuid, $amount);
     }
 
     public function processScheduled()
@@ -34,8 +33,23 @@ class TransactionFacade
         return $this->service->processScheduledTransactions();
     }
 
-    public function approve(Transaction $transaction)
+    public function approve(string $uuid)
     {
-        return $this->service->approveTransaction($transaction);
+        return $this->service->approveTransaction($uuid);
+    }
+
+    public function reject(string $uuid)
+    {
+        return $this->service->rejectTransaction($uuid);
+    }
+
+    public function getPending()
+    {
+        return $this->service->getPending();
+    }
+
+    public function getAccountTransactions(string $uuid)
+    {
+        return $this->service->getAccountTransactions($uuid);
     }
 }

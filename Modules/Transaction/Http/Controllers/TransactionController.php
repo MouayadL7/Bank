@@ -53,6 +53,20 @@ class TransactionController extends BaseController
             new OA\Response(response: 404, description: 'Account not found'),
         ]
     )]
+    public function getPending()
+    {
+        $transactions = $this->facade->getPending();
+
+        return $this->successResponse($transactions);
+    }
+
+    public function getAccountTransactions(string $uuid)
+    {
+        $transactions = $this->facade->getAccountTransactions($uuid);
+
+        return $this->successResponse($transactions);
+    }
+
     public function deposit(DepositRequest $request, $uuid)
     {
         $transaction = $this->facade->deposit($uuid, (float)$request->input('amount'));
@@ -188,16 +202,18 @@ class TransactionController extends BaseController
             new OA\Response(response: 404, description: 'Transaction not found'),
         ]
     )]
-    public function approve(int $id)
+    public function approve(string $uuid)
     {
-        $transaction = Transaction::findOrFail($id);
-        $approved = $this->facade->approve($transaction);
+        $transaction = $this->facade->approve($uuid);
 
-        if ($approved) {
-            return $this->successResponse($transaction, 'Transaction approved successfully.');
-        }
+        return $this->successResponse($transaction);
+    }
 
-        return $this->errorResponse('Transaction could not be approved.');
+    public function reject(string $uuid)
+    {
+        $transaction = $this->facade->reject($uuid);
+
+        return $this->successResponse($transaction);
     }
 
     #[OA\Post(

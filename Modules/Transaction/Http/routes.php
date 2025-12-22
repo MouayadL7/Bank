@@ -14,10 +14,16 @@ use Modules\Transaction\Http\Controllers\TransactionController;
 |
 */
 
-// transaction-like endpoints
-Route::prefix('{uuid}/transactions')->group(function () {
-    Route::post('deposit', [TransactionController::class, 'deposit']);
-    Route::post('withdraw', [TransactionController::class, 'withdraw']);
-    // Route::post('transfer', [TransactionController::class, 'transfer']);
+Route::prefix('accounts')->group(function () {
+    Route::get('/{uuid}/transactions', [TransactionController::class, 'getAccountTransactions']);
+    Route::post('/{uuid}/transactions/deposit', [TransactionController::class, 'deposit']);
+    Route::post('/{uuid}/transactions/withdraw', [TransactionController::class, 'withdraw']);
+    Route::post('/{fromUuid}/transactions/transfer/{toUuid}', [TransactionController::class, 'transfer']);
+});
+
+Route::middleware(['auth:api', 'can:isManager'])->prefix('transactions')->group(function() {
+    Route::get('pending', [TransactionController::class, 'getPending']);
+    Route::post('{uuid}/approve', [TransactionController::class, 'approve']);
+    Route::post('{uuid}/reject', [TransactionController::class, 'reject']);
 });
 

@@ -61,7 +61,7 @@ class UserController extends BaseController
     {
         $users = $this->userService->list($request->validated());
 
-        return $this->successResponse($users);
+        return $this->paginatedResponse($users);
     }
 
     #[OA\Get(
@@ -121,7 +121,7 @@ class UserController extends BaseController
     {
         $users = $this->userService->search($request->validated());
 
-        return $this->successResponse($users);
+        return $this->paginatedResponse($users);
     }
 
     #[OA\Get(
