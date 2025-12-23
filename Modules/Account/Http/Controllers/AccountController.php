@@ -132,7 +132,7 @@ class AccountController extends BaseController
 
         return $this->successResponse($accountResource);
     }
-
+  
     public function getMyAccounts()
     {
         $accounts = $this->service->getMyAccounts();
