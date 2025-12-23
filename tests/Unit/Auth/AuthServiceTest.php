@@ -3,7 +3,6 @@
 namespace Tests\Unit\Auth;
 
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 use Mockery;
 use Modules\Auth\Actions\AuthenticatorAction;
@@ -18,7 +17,6 @@ use Tests\TestCase;
 
 class AuthServiceTest extends TestCase
 {
-    use RefreshDatabase;
 
     protected function tearDown(): void
     {
@@ -31,7 +29,7 @@ class AuthServiceTest extends TestCase
         // Arrange
         $email = 'test@example.com';
         $password = 'password123';
-        
+
         $user = new User();
         $user->id = 1;
         $user->email = $email;
@@ -111,7 +109,7 @@ class AuthServiceTest extends TestCase
         // Arrange
         $email = 'test@example.com';
         $password = 'password123';
-        
+
         $user = new User();
         $user->id = 1;
         $user->email = $email;

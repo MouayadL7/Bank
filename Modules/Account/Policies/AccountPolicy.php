@@ -59,4 +59,20 @@ class AccountPolicy
 
         return true;
     }
+
+    /**
+     * تحقق من صلاحية عرض حساب معين
+     *
+     * @param User $user
+     * @param Account $account
+     * @return bool
+     */
+    public function view(User $user, Account $account)
+    {
+        if (Gate::allows('isCustomer')) {
+            return $user->id == $account->customer_id;
+        }
+
+        return true;
+    }
 }
