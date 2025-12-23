@@ -14,8 +14,91 @@
     </testsuites>
     <source>
         <include>
-            <directory>app</directory>
+            <directory>Modules</directory>
         </include>
+        <exclude>
+            <!-- Main app directory -->
+            <directory>app</directory>
+
+            <!-- Test directories
+            <directory>*/Tests</directory>
+            <directory>*/tests</directory>
+            <directory>*/Test</directory>
+            <directory>*/test</directory>
+            <file>*/TestCase.php</file> -->
+
+            <!-- Specific module exclusions -->
+            <directory>Modules/AccessControll</directory>
+
+            <!-- Account Module -->
+            <directory>Modules/Account/DTOs</directory>
+            <directory>Modules/Account/Database</directory>
+            <directory>Modules/Account/Enums</directory>
+            <directory>Modules/Account/Helpers</directory>
+            <directory>Modules/Account/Http</directory>
+            <directory>Modules/Account/Lang</directory>
+            <directory>Modules/Account/Listeners</directory>
+            <directory>Modules/Account/Providers</directory>
+
+            <!-- Auth Module -->
+            <directory>Modules/Auth/DTOs</directory>
+            <directory>Modules/Auth/Database</directory>
+            <directory>Modules/Auth/Lang</directory>
+            <directory>Modules/Auth/Models</directory>
+            <directory>Modules/Auth/Repositories</directory>
+            <directory>Modules/Auth/Providers</directory>
+
+            <!-- Core Module -->
+            <directory>Modules/Core</directory>
+
+            <!-- Customer Module -->
+            <directory>Modules/Customer/DTOs</directory>
+            <directory>Modules/Customer/Database</directory>
+            <directory>Modules/Customer/Enums</directory>
+            <directory>Modules/Customer/Http</directory>
+            <directory>Modules/Customer/Lang</directory>
+            <directory>Modules/Customer/Models</directory>
+            <directory>Modules/Customer/Repositories</directory>
+
+            <!-- Dashboard Module -->
+            <directory>Modules/Dashboard</directory>
+
+            <!-- Recurring Module -->
+            <directory>Modules/Recurring</directory>
+
+            <!-- Notification Module -->
+            <directory>Modules/Notification</directory>
+
+            <!-- Shared Module -->
+            <directory>Modules/Shared</directory>
+
+            <!-- Report Module -->
+            <directory>Modules/Report/Config</directory>
+            <directory>Modules/Report/Database</directory>
+            <directory>Modules/Report/Http</directory>
+            <directory>Modules/Report/Listeners</directory>
+            <directory>Modules/Report/Repositories/Eloquent</directory>
+
+            <!-- Transaction Module -->
+            <directory>Modules/Transaction/Database</directory>
+            <directory>Modules/Transaction/DTOs</directory>
+            <directory>Modules/Transaction/Enums</directory>
+            <directory>Modules/Transaction/Events</directory>
+            <directory>Modules/Transaction/Facades</directory>
+            <directory>Modules/Transaction/Http</directory>
+            <directory>Modules/Transaction/Jobs</directory>
+            <directory>Modules/Transaction/Lang</directory>
+            <directory>Modules/Transaction/Models</directory>
+            <directory>Modules/Transaction/Repositories/Eloquent</directory>
+
+            <!-- User Module -->
+            <directory>Modules/User/DTOs</directory>
+            <directory>Modules/User/Database</directory>
+            <directory>Modules/User/Helpers</directory>
+            <directory>Modules/User/Http</directory>
+            <directory>Modules/User/Lang</directory>
+            <directory>Modules/User/Repositories/Eloquent</directory>
+        </exclude>
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>

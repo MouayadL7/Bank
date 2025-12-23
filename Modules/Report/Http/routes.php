@@ -12,7 +12,7 @@ use Modules\Report\Http\Controllers\ReportController;
 |
 */
 
-Route::prefix('reports')->group(function () {
+Route::middleware(['auth:api', 'can:isAdmin'])->prefix('reports')->group(function () {
     Route::get('transactions/daily', [ReportController::class, 'dailyTransactions']);
     Route::get('accounts/summary', [ReportController::class, 'accountSummary']);
     Route::get('audit-logs', [ReportController::class, 'auditLogs']);

@@ -11,6 +11,7 @@ use Modules\Account\Actions\ChangeParentAccountAction;
 use Modules\Account\Actions\CloseAccountAction;
 use Modules\Account\Actions\UpdateAccountMetaAction;
 use Modules\Account\DTOs\AccountData;
+use Modules\Account\Enums\AccountType;
 use Modules\Account\Events\AccountClosed;
 use Modules\Account\Events\AccountStateChanged;
 use Modules\Account\Http\Resources\AccountResource;
@@ -34,7 +35,7 @@ class AccountServiceTest extends TestCase
     {
         // Arrange
         $paginator = new LengthAwarePaginator([], 0, 15);
-        
+
         $repo = Mockery::mock(AccountRepositoryInterface::class);
         $repo->shouldReceive('all')
             ->once()
@@ -124,9 +125,10 @@ class AccountServiceTest extends TestCase
         $account = new Account();
         $account->id = 1;
         $account->customer_id = 1;
+        $account->type = AccountType::SAVINGS->value;
 
         $userData = Mockery::mock(\Modules\User\DTOs\UserData::class);
-        
+
         $dto = Mockery::mock(AccountData::class);
         $dto->userData = $userData;
         $dto->shouldReceive('toArray')
