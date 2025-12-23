@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<psalm xmlns="https://psalm.dev/schema/configuration" version="3.0">
+    <directories>
+        <directory name="app"/>
+    </directories>
+    <level name="high"/>
+</psalm>

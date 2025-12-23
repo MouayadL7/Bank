@@ -9,17 +9,27 @@
         "php": "^8.2",
         "laravel-notification-channels/fcm": "^5.1",
         "laravel/framework": "^12.0",
+        "laravel/octane": "^2.13",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "predis/predis": "^3.3",
+        "sentry/sentry-laravel": "^4.20",
+        "swoole/ide-helper": "^6.0"
     },
     "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
         "fakerphp/faker": "^1.23",
+        "friendsofphp/php-cs-fixer": "^3.92",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
+        "laravel/telescope": "^5.16",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5.3",
+        "squizlabs/php_codesniffer": "^4.0",
+        "vimeo/psalm": "^6.5"
     },
     "autoload": {
         "psr-4": {
@@ -81,7 +91,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "minimum-stability": "stable",
