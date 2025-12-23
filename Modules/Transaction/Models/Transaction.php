@@ -2,14 +2,14 @@
 
 namespace Modules\Transaction\Models;
 
-use Modules\Transaction\Enums\TransactionStatus;
-use Modules\Transaction\Enums\TransactionType;
+use Modules\Transaction\Enums\TransactionStatusEnum;
+use Modules\Transaction\Enums\TransactionTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Account\Models\Account;
-use App\Models\User;
+use Modules\User\Models\User;
 
 class Transaction extends Model
 {
@@ -19,21 +19,34 @@ class Transaction extends Model
 
     protected $casts = [
         'amount'        => 'decimal:4',
-        'type'          => TransactionType::class,
-        'status'        => TransactionStatus::class,
+        'type'          => TransactionTypeEnum::class,
+        'status'        => TransactionStatusEnum::class,
         'is_scheduled'  => 'boolean',
         'scheduled_at'  => 'datetime',
+        'approved_at'   => 'datetime',
     ];
 
     public function isApproved(): bool
     {
-        return $this->status === TransactionStatus::APPROVED;
+        return $this->status === TransactionStatusEnum::APPROVED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->status === TransactionStatusEnum::REJECTED;
     }
 
     public function approve(int $approvedBy)
     {
+        $this->status = TransactionStatusEnum::APPROVED->value;
         $this->approved_by = $approvedBy;
         $this->approved_at = now();
+        $this->save();
+    }
+
+    public function reject(int $rejectedBy)
+    {
+        $this->status = TransactionStatusEnum::REJECTED->value;
         $this->save();
     }
 

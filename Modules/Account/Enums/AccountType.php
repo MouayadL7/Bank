@@ -23,4 +23,19 @@ enum AccountType: string
             AccountType::INVESTMENT => 'Investment Account',
         };
     }
+
+    public function decoratorClass(): string
+    {
+        return match ($this) {
+            self::SAVINGS => \Modules\Accounts\Decorators\SavingsAccountDecorator::class,
+            self::CHECKING => \Modules\Accounts\Decorators\CheckingAccountDecorator::class,
+            self::LOAN => \Modules\Accounts\Decorators\LoanAccountDecorator::class,
+            self::INVESTMENT => \Modules\Accounts\Decorators\InvestmentAccountDecorator::class,
+        };
+    }
+
+    public function isLoan(): bool
+    {
+        return $this === self::LOAN;
+    }
 }

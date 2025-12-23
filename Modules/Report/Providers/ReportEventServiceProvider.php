@@ -3,7 +3,7 @@
 namespace Modules\Report\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Modules\Account\Events\AccountBalanceUpdated;
+use Modules\Transaction\Events\AccountBalanceUpdated;
 use Modules\Account\Events\AccountClosed;
 use Modules\Account\Events\AccountStateChanged;
 use Modules\Report\Listeners\LogAccountBalanceChange;

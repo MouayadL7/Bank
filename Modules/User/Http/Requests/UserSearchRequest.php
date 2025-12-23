@@ -32,7 +32,7 @@ class UserSearchRequest extends BaseFormRequest
                 'max:100',
             ],
             'role' => [
-                'nullable',
+                'required',
                 'string',
                 Rule::exists('roles', 'name'),
             ],

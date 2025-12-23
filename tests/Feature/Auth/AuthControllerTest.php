@@ -161,7 +161,7 @@ class AuthControllerTest extends TestCase
 
         // Assert
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['password']);
+            ->assertJsonValidationErrors(['email']);
     }
 
     public function test_login_returns_error_when_user_is_suspended(): void

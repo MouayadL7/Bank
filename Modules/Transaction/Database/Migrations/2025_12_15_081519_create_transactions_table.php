@@ -13,6 +13,7 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
 
             $table->foreignId('from_account_id')->nullable()->constrained('accounts')->onDelete('set null');
             $table->foreignId('to_account_id')->nullable()->constrained('accounts')->onDelete('set null');
@@ -29,6 +30,8 @@ return new class extends Migration
             // Scheduled transactions
             $table->boolean('is_scheduled')->default(false);
             $table->timestamp('scheduled_at')->nullable();
+
+            $table->foreignId('created_by')->constrained('users');
 
             $table->timestamps();
             $table->softDeletes();

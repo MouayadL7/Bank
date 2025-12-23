@@ -1,0 +1,32 @@
+{
+  "withdraw_fee": 2.5
+}
+Create Account: 'meta.withdraw_fee' => ['nullable', 'numeric', 'min:0'],
+
+
+{
+    "interest_rate": 0.03,
+    "minimum_balance": 500
+}
+'meta.interest_rate' => ['required', 'numeric', 'min:0'],
+'meta.minimum_balance' => ['required', 'numeric', 'min:0'],
+
+
+{
+    "loan_limit": 10000,
+    "interest_rate": 0.08,
+    "start_date": "2025-01-01",
+    "duration_months": 24
+}
+'meta.loan_limit' => ['required', 'numeric', 'min:1'],
+'meta.interest_rate' => ['required', 'numeric', 'min:0'],
+'meta.duration_months' => ['required', 'integer', 'min:1'],
+
+
+{
+    "lock_until": "2026-01-01",
+    "early_withdraw_penalty": 0.1
+}
+'meta.lock_until' => ['required', 'date', 'after:today'],
+'meta.early_withdraw_penalty' => ['nullable', 'numeric', 'between:0,1'],
+

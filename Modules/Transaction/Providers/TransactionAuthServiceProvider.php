@@ -3,7 +3,6 @@
 namespace Modules\Transaction\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Modules\Transaction\Models\Transaction;
 use Modules\Transaction\Policies\TransactionPolicy;
 

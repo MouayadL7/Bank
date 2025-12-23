@@ -7,13 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Account\Enums\AccountState;
 use Modules\Account\Enums\AccountType;
-use Modules\Account\Patterns\States\{
-    AccountStateInterface,
-    ActiveState,
-    FrozenState,
-    SuspendedState,
-    ClosedState
-};
+use Modules\Account\Patterns\States\AccountStateInterface;
+use Modules\User\Models\User;
 
 class Account extends Model
 {
@@ -25,7 +20,16 @@ class Account extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'uuid','customer_id','type','balance','currency','state','parent_account_id'
+        'uuid',
+        'account_number',
+        'customer_id',
+        'parent_account_id',
+        'type',
+        'state',
+        'balance',
+        'currency',
+        'meta',
+        'opened_at',
     ];
 
     /**
@@ -36,10 +40,17 @@ class Account extends Model
     protected function casts(): array
     {
         return [
-            'balance' => 'decimal:4',
-            'type'    => AccountType::class,
-            'state'   => AccountState::class,
+            'balance'   => 'decimal:4',
+            'type'      => AccountType::class,
+            'state'     => AccountState::class,
+            'opened_at' => 'datetime',
+            'meta'      => 'array',
         ];
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function children()
@@ -49,7 +60,7 @@ class Account extends Model
 
     public function parent()
     {
-        return $this->belongsTo(AccountModel::class, 'parent_account_id');
+        return $this->belongsTo(Account::class, 'parent_account_id');
     }
 
     public function getStateInstance(): AccountStateInterface
@@ -60,5 +71,11 @@ class Account extends Model
     public function isComposite(): bool
     {
         return $this->children()->exists();
+    }
+
+    public function typeDecorator()
+    {
+        $decoratorClass = $this->type->decoratorClass();
+        return new $decoratorClass($this);
     }
 }

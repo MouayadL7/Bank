@@ -9,6 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Modules\AccessControl\Models\Role;
 use Modules\User\Enums\UserStatus;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Account\Models\Account;
 
 class User extends Authenticatable
 {
@@ -47,7 +48,14 @@ class User extends Authenticatable
      */
     protected function casts(): array
     {
-        return [];
+        return [
+            'status' => UserStatus::class,
+        ];
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === UserStatus::ACTIVE;
     }
 
     public function role()
@@ -55,9 +63,9 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function isActive(): bool
+    public function accounts()
     {
-        return $this->status == UserStatus::ACTIVE->value;
+        return $this->hasMany(Account::class, 'customer_id');
     }
 
     // Scopes

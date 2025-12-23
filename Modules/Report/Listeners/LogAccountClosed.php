@@ -16,6 +16,7 @@ class LogAccountClosed
             'event' => 'account.closed',
             'subject_type' => Account::class,
             'subject_id' => $event->account->id,
+            'causer_id' => auth()->id(),
             'description' => 'Account closed',
             'metadata' => [
                 'account_id' => $event->account->id,

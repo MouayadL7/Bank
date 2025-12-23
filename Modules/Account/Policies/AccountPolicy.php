@@ -1,12 +1,13 @@
 <?php
 
-namespace Modules\Transaction\Policies;
+namespace Modules\Account\Policies;
 
 use Modules\User\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Gate;
+use Modules\Account\Models\Account;
 
-class TransactionPolicy
+class AccountPolicy
 {
     use HandlesAuthorization;
 
@@ -14,14 +15,13 @@ class TransactionPolicy
      * تحقق من صلاحية الإيداع في حساب معين
      *
      * @param User $user
-     * @param string $accountUuid
+     * @param Account $account
      * @return bool
      */
-    public function deposit(User $user, string $accountUuid)
+    public function deposit(User $user, Account $account)
     {
         if (Gate::allows('isCustomer')) {
-            // تحقق من أن المستخدم يملك الحساب بناءً على UUID
-            return $user->accounts()->where('uuid', $accountUuid)->exists();
+            return $user->id == $account->customer_id;
         }
 
         return true;
@@ -31,14 +31,13 @@ class TransactionPolicy
      * تحقق من صلاحية السحب من حساب معين
      *
      * @param User $user
-     * @param string $accountUuid
+     * @param Account $account
      * @return bool
      */
-    public function withdraw(User $user, string $accountUuid)
+    public function withdraw(User $user, Account $account)
     {
         if (Gate::allows('isCustomer')) {
-            // تحقق من أن المستخدم يملك الحساب بناءً على UUID
-            return $user->accounts()->where('uuid', $accountUuid)->exists();
+            return $user->id == $account->customer_id;
         }
 
         return true;
@@ -52,11 +51,26 @@ class TransactionPolicy
      * @param string $toUuid
      * @return bool
      */
-    public function transfer(User $user, string $fromUuid, string $toUuid)
+    public function transfer(User $user, Account $fromAccount)
     {
         if (Gate::allows('isCustomer')) {
-            // تحقق من أن المستخدم يملك الحساب المرسل (fromUUID)
-            return $user->accounts()->where('uuid', $fromUuid)->exists();
+            return $user->id == $fromAccount->customer_id;
+        }
+
+        return true;
+    }
+
+    /**
+     * تحقق من صلاحية عرض حساب معين
+     *
+     * @param User $user
+     * @param Account $account
+     * @return bool
+     */
+    public function view(User $user, Account $account)
+    {
+        if (Gate::allows('isCustomer')) {
+            return $user->id == $account->customer_id;
         }
 
         return true;
