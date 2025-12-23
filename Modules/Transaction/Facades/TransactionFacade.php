@@ -10,7 +10,7 @@ class TransactionFacade
 
     public function __construct(TransactionService $service)
     {
-        return $this->service = $service;
+        $this->service = $service;
     }
 
     public function deposit(string $uuid, float $amount)

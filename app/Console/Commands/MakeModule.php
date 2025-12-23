@@ -107,7 +107,7 @@ class MakeModule extends Command
         // Models & Factories
         $this->createFile("{$modulePath}/Models/{$singularName}.php", $this->replaceModulePlaceholders($this->getStub('model.stub'), $moduleName, $singularName, $pluralName, $snakeCaseSingular, $camelCaseSingular));
         $this->createFile("{$modulePath}/Database/Factories/{$singularName}Factory.php", $this->replaceModulePlaceholders($this->getStub('factory.stub'), $moduleName, $singularName, $pluralName, $snakeCaseSingular, $camelCaseSingular));
-        $this->createFile("{$modulePath}/Database/Migrations/".date('Y_m_d_His')."_create_{$snakeCasePlural}_table.php", $this->replaceModulePlaceholders($this->getStub('migration-create.stub'), $moduleName, $singularName, $pluralName, $snakeCaseSingular, $camelCaseSingular, null, $snakeCasePlural));
+        $this->createFile("{$modulePath}/Database/Migrations/" . date('Y_m_d_His') . "_create_{$snakeCasePlural}_table.php", $this->replaceModulePlaceholders($this->getStub('migration-create.stub'), $moduleName, $singularName, $pluralName, $snakeCaseSingular, $camelCaseSingular, null, $snakeCasePlural));
 
         // Services & Repositories
         $this->createFile("{$modulePath}/Services/{$singularName}Service.php", $this->replaceModulePlaceholders($this->getStub('service.stub'), $moduleName, $singularName, $pluralName, $snakeCaseSingular, $camelCaseSingular));
