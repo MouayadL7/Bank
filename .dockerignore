@@ -1,0 +1,72 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+/vendor
+/node_modules
+
+# Testing
+/tests
+/.phpunit.cache
+/phpunit.xml
+
+# Development files
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+# Build files
+/public/hot
+/public/storage
+/public/build
+
+# Documentation
+README.md
+*.md
+!DEPLOYMENT.md
+
+# Docker files (don't copy into image)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Xdebug files
+download-xdebug.ps1
+install-xdebug.ps1
+configure-xdebug.ps1
+quick-install-xdebug.bat
+INSTALL_XDEBUG_NOW.md
+XDEBUG_INSTALL_INSTRUCTIONS.md
+xdebug_wizard.html
+php-info.txt
+
