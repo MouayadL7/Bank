@@ -53,6 +53,11 @@ class AccountService
             $accountData['customer_id'] = $customer->id;
             $account = $this->repo->create($accountData);
 
+            if ($account->type->isLoan()) {
+                app(LoanRecurringSetupService::class)
+                    ->createMonthlyPayment($account);
+            }
+
             return new AccountResource($account);
         });
     }

@@ -4,25 +4,31 @@ namespace Modules\Account\Decorators;
 
 use Modules\Account\Decorators\AccountTypeBehavior;
 use Modules\Account\Models\Account;
+use Modules\Account\Patterns\Composite\AccountComponent;
 
 abstract class AccountTypeDecorator implements AccountTypeBehavior
 {
     public function __construct(
-        protected Account $account
+        protected AccountComponent $inner
     ) {}
 
-    public function calculateBalance(Account $account): float
+    public function calculateBalance(): float
     {
-        return (float) $account->balance;
+        return $this->inner->getBalance();
     }
 
-    public function onDeposit(Account $account, float $amount): void
+    public function deposit(float $amount): void
     {
-        // default: no-op
+        $this->inner->deposit($amount);
     }
 
-    public function onWithdraw(Account $account, float $amount): void
+    public function withdraw(float $amount): void
     {
-        // default: no-op
+        $this->inner->withdraw($amount);
+    }
+
+    public function getModel(): Account
+    {
+        return $this->inner->getModel();;
     }
 }

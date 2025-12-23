@@ -2,11 +2,19 @@
 
 namespace Modules\Account\Decorators;
 
+use DomainException;
+
 class SavingsAccountDecorator extends AccountTypeDecorator
 {
-    public function calculateBalance($account): float
+    public function onWithdraw($account, float $amount): void
     {
-        $rate = $account->meta['interest_rate'] ?? 0;
-        return $account->balance * (1 + $rate);
+        $account = $this->getModel();
+        $minimum = (float) ($account->meta['minimum_balance'] ?? 0);
+
+        if (($account->balance - $amount) < $minimum) {
+            throw new DomainException("Minimum balance must be maintained");
+        }
+
+        parent::withdraw($amount);
     }
 }

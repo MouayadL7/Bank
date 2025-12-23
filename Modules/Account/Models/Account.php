@@ -72,4 +72,10 @@ class Account extends Model
     {
         return $this->children()->exists();
     }
+
+    public function typeDecorator()
+    {
+        $decoratorClass = $this->type->decoratorClass();
+        return new $decoratorClass($this);
+    }
 }

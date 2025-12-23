@@ -2,6 +2,8 @@
 
 namespace Modules\Account\Patterns\Composite;
 
+use Modules\Account\Models\Account;
+
 class CompositeAccount implements AccountComponent
 {
     /** @var AccountComponent[] */
@@ -10,6 +12,11 @@ class CompositeAccount implements AccountComponent
     public function add(AccountComponent $account): void
     {
         $this->children[] = $account;
+    }
+
+    public function getModel()
+    {
+        //
     }
 
     public function getBalance(): float

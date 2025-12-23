@@ -2,11 +2,18 @@
 
 namespace Modules\Account\Decorators;
 
+use DomainException;
+
 class CheckingAccountDecorator extends AccountTypeDecorator
 {
-    public function onWithdraw($account, float $amount): void
+    public function onWithdraw(float $amount): void
     {
-        $fee = $account->meta['withdraw_fee'] ?? 0;
-        $account->balance -= $fee;
+        $fee = (float) ($this->getModel()->meta['withdraw_fee'] ?? 0);
+
+        parent::withdraw($amount);
+
+        if ($fee > 0) {
+            parent::withdraw($fee);
+        }
     }
 }
