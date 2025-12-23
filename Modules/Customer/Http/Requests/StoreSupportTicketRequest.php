@@ -14,7 +14,7 @@ class StoreSupportTicketRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('isCustomer')|| Gate::allows('isManager')|| Gate::allows('isAdmin');
+        return Gate::allows('isCustomer');
     }
 
     /**
@@ -27,7 +27,6 @@ class StoreSupportTicketRequest extends BaseFormRequest
         return [
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
-            'status'      =>  ['nullable', 'string', Rule::in(SupportTicketStatus::values())],
             'customer_id' => 'required|exists:users,id',
         ];
     }

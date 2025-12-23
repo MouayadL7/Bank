@@ -28,7 +28,7 @@
             <file>*/TestCase.php</file> -->
 
             <!-- Specific module exclusions -->
-            <directory>Modules/AccessControll</directory>
+            <directory>Modules/AccessControl</directory>
 
             <!-- Account Module -->
             <directory>Modules/Account/DTOs</directory>
@@ -38,6 +38,7 @@
             <directory>Modules/Account/Http</directory>
             <directory>Modules/Account/Lang</directory>
             <directory>Modules/Account/Listeners</directory>
+            <directory>Modules/Account/Patterns</directory>
             <directory>Modules/Account/Providers</directory>
 
             <!-- Auth Module -->
@@ -89,6 +90,7 @@
             <directory>Modules/Transaction/Jobs</directory>
             <directory>Modules/Transaction/Lang</directory>
             <directory>Modules/Transaction/Models</directory>
+            <directory>Modules/Transaction/Handlers</directory>
             <directory>Modules/Transaction/Repositories/Eloquent</directory>
 
             <!-- User Module -->

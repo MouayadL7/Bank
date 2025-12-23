@@ -14,7 +14,7 @@ class UpdateSupportTicketRequest extends BaseFormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('isCustomer')|| Gate::allows('isManager')|| Gate::allows('isAdmin');
+        return Gate::allows('isTiller');
     }
 
     /**

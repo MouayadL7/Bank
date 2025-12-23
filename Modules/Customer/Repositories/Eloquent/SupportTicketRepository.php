@@ -12,7 +12,7 @@ class SupportTicketRepository implements SupportTicketRepositoryInterface
     public function getAllTickets()
     {
         return SupportTicket::select('id', 'customer_id', 'title', 'description', 'status', 'created_at', 'updated_at')
-            ->with(['customer']) 
+            ->with(['customer'])
             ->get();
     }
 

@@ -23,4 +23,3 @@ use OpenApi\Attributes as OA;
 class OpenApi
 {
 }
-
